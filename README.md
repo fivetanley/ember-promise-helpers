@@ -36,6 +36,21 @@ Ember templates, without wrapping your objects with something like
 {{/if}}
 ```
 
+The `await` helper also works anywhere, because it's just a Handlebars
+subexpression. For example, you can pass it to a another helper...
+
+```handlebars
+{{#each (async model.comments) as |comment|}}
+  {{comment.author}} wrote {{comment.text}}
+{{/each}}
+```
+
+Or passing it to a component:
+
+```handlebars
+{{twitter-timeline users=(await user.following)}}
+```
+
 If you want to know when a promise becomes rejected or resolved, you can
 use the `await-promise` component, which gives you an `error` property
 if the promise becomes rejected (similar to calling `.catch` on a
