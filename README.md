@@ -40,7 +40,7 @@ The `await` helper also works anywhere, because it's just a Handlebars
 subexpression. For example, you can pass it to a another helper...
 
 ```handlebars
-{{#each (async model.comments) as |comment|}}
+{{#each (await model.comments) as |comment|}}
   {{comment.author}} wrote {{comment.text}}
 {{/each}}
 ```
