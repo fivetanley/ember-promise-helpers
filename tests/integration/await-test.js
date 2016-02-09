@@ -74,3 +74,98 @@ test('changing the promise changes the eventually rendered value', function (ass
   });
 });
 
+test('works with {{#each}} when promise resolves', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', promise.deferred);
+
+  this.render(hbs`
+    <ul>
+      {{#each (await promise) as |thing|}}
+        <li>{{thing.name}}</li>
+      {{else}}
+        Nothing.
+      {{/each}}
+    </ul>
+  `);
+
+  assert.equal(this.$().text().trim(), 'Nothing.', '{{#each}} renders as empty until promise resolves');
+
+  deferred.resolve([
+    {name: 'Katie'},
+    {name: 'Jenny'},
+    {name: 'Anna'}
+  ]);
+
+  return deferred.promise.then(() => {
+    let lis = this.$('li');
+    assert.equal(lis.length, 3);
+
+    let text = lis.map(function() {
+      return this.$().text().trim();
+    });
+
+    assert.equal(text.join(' '), 'Katie Jenny Anna');
+  });
+});
+
+test('works with {{#each}} when promise rejects', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', promise.deferred);
+
+  this.render(hbs`
+    <ul>
+      {{#each (await promise) as |thing|}}
+        <li>{{thing.name}}</li>
+      {{else}}
+        Nothing.
+      {{/each}}
+    </ul>
+  `);
+
+  assert.equal(this.$().text().trim(), 'Nothing.', '{{#each}} renders as empty until promise rejects');
+
+  deferred.reject(new Error('oh no'));
+
+  return deferred.promise.catch(() => {
+    assert.equal(this.$('li').length, 0);
+  });
+});
+
+test('works with inline if when promise rejects', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', promise.deferred);
+
+  this.render(hbs`
+    <div class="foo {{if (await promise) 'fullfilled' 'rejected'}}"></div>
+  `);
+
+  assert.equal(this.$('.foo').hasClass('fulfilled'), false);
+
+  deferred.reject(new Error('oh no'));
+
+  return deferred.promise.catch(() => {
+    assert.equal(this.$('.foo').hasClass('fulfilled'), false);
+  });
+});
+
+test('works with inline if when promise resolves', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', promise.deferred);
+
+  this.render(hbs`
+    <div class="foo {{if (await promise) 'fullfilled' 'rejected'}}"></div>
+  `);
+
+  assert.equal(this.$('.foo').hasClass('fulfilled'), false);
+
+  deferred.resolve('yay!');
+
+  return deferred.promise.then(() => {
+    assert.equal(this.$('.foo').hasClass('fulfilled'), true, 'inline if updates with when promise resolves');
+  });
+});
+
