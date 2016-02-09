@@ -1,0 +1,76 @@
+import { test, moduleForComponent } from 'ember-qunit';
+import hbs from 'htmlbars-inline-precompile';
+import Ember from 'ember';
+
+const {RSVP} = Ember;
+
+moduleForComponent('integration - is-rejected helper', {
+  integration: true,
+
+  beforeEach() {
+
+  }
+});
+
+test('evaluates to false until the promise is resolved', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', deferred.promise);
+
+  this.render(hbs`
+    {{#if (is-rejected promise)}}
+      {{is-rejected promise}}
+    {{else}}
+      idk if it's rejected
+    {{/if}}
+  `);
+
+  assert.equal(this.$().text().trim(), `idk if it's rejected`, 'evaluates to false');
+
+  deferred.rejected(new Error('noooo :('));
+
+  return deferred.promise.catch(() => {
+    assert.equal(this.$().text().trim(), 'true', 'value changes and template re-renders');
+  });
+});
+
+test('renders false when given already fulfilled promise', function (assert) {
+  let deferred = RSVP.defer();
+
+  deferred.resolve('omg!');
+
+  this.set('promise', deferred.promise);
+
+  this.render(hbs`
+    {{#if (is-rejected promise)}}
+      {{is-rejected promise}}
+    {{else}}
+      promise is already fulfilled
+    {{/if}}
+  `);
+
+  return deferred.promise.then(() => {
+    assert.equal(this.$().text(), 'promise is already fulfilled');
+  });
+});
+
+test('evaluates to true given an already rejected promise', function (assert) {
+  let deferred = RSVP.defer();
+
+  deferred.reject(new Error('nooooo :('));
+
+  this.set('promise', deferred.promise);
+
+  this.render(hbs`
+    {{#if (is-rejected promise)}}
+      {{is-rejected promise}}
+    {{else}}
+      totally rejected
+    {{/if}}
+  `);
+
+  return deferred.promise.catch(() => {
+    assert.equal(this.$().text(), 'true');
+  });
+});
+
