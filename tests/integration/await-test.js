@@ -46,7 +46,7 @@ test('renders null until the promise is rejected', function (assert) {
 
   deferred.reject(new Error('oops'));
 
-  return deferred.promise.then(() => {
+  return deferred.promise.catch(() => {
     assert.equal(this.$('#promise').text().trim(), '', 'value of re-render does not reveal reason for rejection');
   });
 });
