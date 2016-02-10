@@ -169,3 +169,28 @@ test('works with inline if when promise resolves', function (assert) {
   });
 });
 
+test('always renders with the last promise set', function (assert) {
+  let deferred1 = RSVP.defer();
+  let deferred2 = RSVP.defer();
+  let deferred3 = RSVP.defer();
+
+  this.set('promise', deferred3);
+
+  this.render(hbs`
+    {{await promise}}
+  `);
+
+  deferred1.resolve('number 1');
+
+  Ember.run.later(deferred2, 'resolve', 'number 2', 200);
+  Ember.run.later(deferred3, 'resolve', 'number 3', 500);
+
+  this.set('promise', deferred2.promise);
+  this.set('promise', deferred3.promise);
+
+  return RSVP.all([deferred2.promise, deferred3.promise]).then(() => {
+    assert.equal(this.$().text().trim(), 'number 3', 'the last set promise is rendered last even when other promises resolve first');
+  });
+
+});
+
