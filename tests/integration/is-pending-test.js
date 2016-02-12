@@ -14,7 +14,7 @@ test('is true until the promise resolves', function (assert) {
   this.set('promise', deferred.promise);
 
   this.render(hbs`
-    {{#if (is-pending)}}
+    {{#if (is-pending promise)}}
       Pending!
     {{else}}
       Done!
@@ -36,7 +36,7 @@ test('is true until the promise rejects', function (assert) {
   this.set('promise', deferred.promise);
 
   this.render(hbs`
-    {{#if (is-pending)}}
+    {{#if (is-pending promise)}}
       Pending!
     {{else}}
       Done!
@@ -57,7 +57,7 @@ test('always renders with the last promise set', function (assert) {
   let deferred2 = RSVP.defer();
   let deferred3 = RSVP.defer();
 
-  this.set('promise', deferred1);
+  this.set('promise', deferred1.promise);
 
   this.render(hbs`
     {{if (is-pending promise) 'pending' 'not-pending'}}
@@ -71,7 +71,7 @@ test('always renders with the last promise set', function (assert) {
   this.set('promise', deferred2.promise);
   this.set('promise', deferred3.promise);
 
-  return RSVP.all([deferred1.promise, deferred2.promise]).finally(() => {
+  return RSVP.all([deferred1.promise, deferred2.promise, deferred3.promise]).finally(() => {
     assert.equal(this.$().text().trim(), 'pending', 'the last set promise is rendered last even when other promises resolve first');
   });
 

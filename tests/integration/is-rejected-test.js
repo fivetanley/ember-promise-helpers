@@ -79,7 +79,7 @@ test('always renders with the last promise set', function (assert) {
   let deferred2 = RSVP.defer();
   let deferred3 = RSVP.defer();
 
-  this.set('promise', deferred1);
+  this.set('promise', deferred1.promise);
 
   this.render(hbs`
     {{if (is-rejected promise) 'rejected' 'not-rejected'}}

@@ -77,7 +77,7 @@ test('changing the promise changes the eventually rendered value', function (ass
 test('works with {{#each}} when promise resolves', function (assert) {
   let deferred = RSVP.defer();
 
-  this.set('promise', promise.deferred);
+  this.set('promise', deferred.promise);
 
   this.render(hbs`
     <ul>
