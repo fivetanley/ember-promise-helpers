@@ -1,4 +1,5 @@
 import { test, moduleForComponent } from 'ember-qunit';
+import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 
@@ -28,7 +29,7 @@ test('renders null until the promise is resolved', function (assert) {
 
   deferred.resolve(text);
 
-  return deferred.promise.then(() => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$('#promise').text().trim(), text, 're-renders when the promise is resolved');
   });
 });
@@ -46,7 +47,7 @@ test('renders null until the promise is rejected', function (assert) {
 
   deferred.reject(new Error('oops'));
 
-  return deferred.promise.catch(() => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$('#promise').text().trim(), '', 'value of re-render does not reveal reason for rejection');
   });
 });
@@ -66,9 +67,10 @@ test('changing the promise changes the eventually rendered value', function (ass
 
   deferred1.resolve(deferred1Text);
 
-  return deferred1.promise.then(() => {
+  return afterRender(deferred1.promise).then(() => {
     deferred2.resolve(deferred2Text);
-    return deferred2.promise;
+    this.set('promise', deferred2.promise);
+    return afterRender(deferred2.promise);
   }).then(() => {
     assert.equal(this.$('#promise').text().trim(), deferred2Text, 'value updates when the promise changes');
   });
@@ -97,13 +99,13 @@ test('works with {{#each}} when promise resolves', function (assert) {
     {name: 'Anna'}
   ]);
 
-  return deferred.promise.then(() => {
+  return afterRender(deferred.promise).then(() => {
     let lis = this.$('li');
     assert.equal(lis.length, 3);
 
-    let text = lis.map(function() {
-      return this.$().text().trim();
-    });
+    let text = lis.map((i, el) => {
+      return Ember.$(el).text().trim();
+    }).toArray();
 
     assert.equal(text.join(' '), 'Katie Jenny Anna');
   });
@@ -112,7 +114,7 @@ test('works with {{#each}} when promise resolves', function (assert) {
 test('works with {{#each}} when promise rejects', function (assert) {
   let deferred = RSVP.defer();
 
-  this.set('promise', promise.deferred);
+  this.set('promise', deferred.promise);
 
   this.render(hbs`
     <ul>
@@ -128,7 +130,7 @@ test('works with {{#each}} when promise rejects', function (assert) {
 
   deferred.reject(new Error('oh no'));
 
-  return deferred.promise.catch(() => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$('li').length, 0);
   });
 });
@@ -136,7 +138,7 @@ test('works with {{#each}} when promise rejects', function (assert) {
 test('works with inline if when promise rejects', function (assert) {
   let deferred = RSVP.defer();
 
-  this.set('promise', promise.deferred);
+  this.set('promise', deferred.promise);
 
   this.render(hbs`
     <div class="foo {{if (await promise) 'fullfilled' 'rejected'}}"></div>
@@ -154,18 +156,19 @@ test('works with inline if when promise rejects', function (assert) {
 test('works with inline if when promise resolves', function (assert) {
   let deferred = RSVP.defer();
 
-  this.set('promise', promise.deferred);
+  this.set('promise', deferred.promise);
 
   this.render(hbs`
-    <div class="foo {{if (await promise) 'fullfilled' 'rejected'}}"></div>
+    <div id="foo" class="{{if (await promise) 'fulfilled' 'rejected'}}"></div>
   `);
 
-  assert.equal(this.$('.foo').hasClass('fulfilled'), false);
+  assert.equal(this.$('#foo').hasClass('fulfilled'), false);
 
   deferred.resolve('yay!');
 
-  return deferred.promise.then(() => {
-    assert.equal(this.$('.foo').hasClass('fulfilled'), true, 'inline if updates with when promise resolves');
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$('#foo').hasClass('fulfilled'), true, 'inline if updates with when promise resolves');
+    deferred.resolve();
   });
 });
 
@@ -188,7 +191,7 @@ test('always renders with the last promise set', function (assert) {
   this.set('promise', deferred2.promise);
   this.set('promise', deferred3.promise);
 
-  return RSVP.all([deferred2.promise, deferred3.promise]).then(() => {
+  return afterRender(RSVP.all([deferred2.promise, deferred3.promise])).then(() => {
     assert.equal(this.$().text().trim(), 'number 3', 'the last set promise is rendered last even when other promises resolve first');
   });
 
