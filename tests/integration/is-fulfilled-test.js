@@ -5,7 +5,7 @@ import Ember from 'ember';
 
 const {RSVP} = Ember;
 
-moduleForComponent('integration - is-pending helper', {
+moduleForComponent('integration - is-fulfilled helper', {
   integration: true,
 
   beforeEach() {
