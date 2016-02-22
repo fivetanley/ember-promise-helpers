@@ -1,4 +1,5 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { moduleForComponent } from 'ember-qunit';
+import { skip } from 'qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 
@@ -8,7 +9,7 @@ moduleForComponent('integration - promise-rejected-reason error', {
   integration: true
 });
 
-test('is false until the promise rejects', function (assert) {
+skip('is false until the promise rejects', function (assert) {
   let deferred = RSVP.defer();
   this.set('promise', deferred.promise);
 
@@ -29,7 +30,7 @@ test('is false until the promise rejects', function (assert) {
   });
 });
 
-test('is false when the promise resolves', function (assert) {
+skip('is false when the promise resolves', function (assert) {
   let deferred = RSVP.defer();
   this.set('promise', deferred.promise);
 
