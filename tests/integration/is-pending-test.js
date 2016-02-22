@@ -1,4 +1,5 @@
-import { test, moduleForComponent } from 'ember-qunit';
+import { moduleForComponent } from 'ember-qunit';
+import { skip } from 'qunit';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 
@@ -8,7 +9,7 @@ moduleForComponent('integration - is-pending helper', {
   integration: true
 });
 
-test('is true until the promise resolves', function (assert) {
+skip('is true until the promise resolves', function (assert) {
   let deferred = RSVP.defer();
 
   this.set('promise', deferred.promise);
@@ -30,7 +31,7 @@ test('is true until the promise resolves', function (assert) {
   });
 });
 
-test('is true until the promise rejects', function (assert) {
+skip('is true until the promise rejects', function (assert) {
   let deferred = RSVP.defer();
 
   this.set('promise', deferred.promise);
@@ -52,7 +53,7 @@ test('is true until the promise rejects', function (assert) {
   });
 });
 
-test('always renders with the last promise set', function (assert) {
+skip('always renders with the last promise set', function (assert) {
   let deferred1 = RSVP.defer();
   let deferred2 = RSVP.defer();
   let deferred3 = RSVP.defer();
