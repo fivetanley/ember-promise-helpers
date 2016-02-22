@@ -1,5 +1,5 @@
-import { moduleForComponent } from 'ember-qunit';
-import { skip } from 'qunit';
+import { test, moduleForComponent } from 'ember-qunit';
+import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 
@@ -9,7 +9,7 @@ moduleForComponent('integration - is-pending helper', {
   integration: true
 });
 
-skip('is true until the promise resolves', function (assert) {
+test('is true until the promise resolves', function (assert) {
   let deferred = RSVP.defer();
 
   this.set('promise', deferred.promise);
@@ -22,16 +22,16 @@ skip('is true until the promise resolves', function (assert) {
     {{/if}}
   `);
 
-  assert.equal(this.$().text().trim(), 'Pending!', 'is-pending is false before resolved');
+  assert.equal(this.$().text().trim(), 'Pending!', 'is-pending is true before resolved');
 
   deferred.resolve('resolved!');
 
-  return deferred.promise.then(() => {
-    assert.equal(this.$().text().trim(), 'Done!', 'is-pending is true after resolved');
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$().text().trim(), 'Done!', 'is-pending is false after resolved');
   });
 });
 
-skip('is true until the promise rejects', function (assert) {
+test('is true until the promise rejects', function (assert) {
   let deferred = RSVP.defer();
 
   this.set('promise', deferred.promise);
@@ -48,12 +48,12 @@ skip('is true until the promise rejects', function (assert) {
 
   deferred.reject(new Error('oh noes'));
 
-  return deferred.promise.catch(() => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$().text().trim(), 'Done!', 'is-pending is true after resolved');
   });
 });
 
-skip('always renders with the last promise set', function (assert) {
+test('always renders with the last promise set', function (assert) {
   let deferred1 = RSVP.defer();
   let deferred2 = RSVP.defer();
   let deferred3 = RSVP.defer();
@@ -72,7 +72,9 @@ skip('always renders with the last promise set', function (assert) {
   this.set('promise', deferred2.promise);
   this.set('promise', deferred3.promise);
 
-  return RSVP.all([deferred1.promise, deferred2.promise, deferred3.promise]).finally(() => {
+  const promises = [deferred1, deferred2].map(d => d.promise);
+
+  return afterRender(RSVP.all(promises)).then(() => {
     assert.equal(this.$().text().trim(), 'pending', 'the last set promise is rendered last even when other promises resolve first');
   });
 
