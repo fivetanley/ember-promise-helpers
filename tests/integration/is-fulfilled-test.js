@@ -1,5 +1,5 @@
-import { moduleForComponent } from 'ember-qunit';
-import { skip } from 'qunit';
+import { test, moduleForComponent } from 'ember-qunit';
+import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 
@@ -13,7 +13,7 @@ moduleForComponent('integration - is-pending helper', {
   }
 });
 
-skip('evaluates to false until the promise is resolved', function (assert) {
+test('evaluates to false until the promise is resolved', function (assert) {
   let deferred = RSVP.defer();
 
   this.set('promise', deferred.promise);
@@ -30,12 +30,12 @@ skip('evaluates to false until the promise is resolved', function (assert) {
 
   deferred.resolve('yay!');
 
-  return deferred.promise.then(() => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$().text().trim(), 'true', 'value changes and template re-renders');
   });
 });
 
-skip('renders true when given already fulfilled promise', function (assert) {
+test('renders true when given already fulfilled promise', function (assert) {
   let deferred = RSVP.defer();
 
   deferred.resolve('omg!');
@@ -50,12 +50,12 @@ skip('renders true when given already fulfilled promise', function (assert) {
     {{/if}}
   `);
 
-  return deferred.promise.then(() => {
-    assert.equal(this.$().text(), 'true');
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$().text().trim(), 'true');
   });
 });
 
-skip('evaluates to falsy given already rejected promise', function (assert) {
+test('evaluates to falsy given already rejected promise', function (assert) {
   let deferred = RSVP.defer();
 
   deferred.reject(new Error('nooooo :('));
@@ -70,12 +70,12 @@ skip('evaluates to falsy given already rejected promise', function (assert) {
     {{/if}}
   `);
 
-  return deferred.promise.catch(() => {
-    assert.equal(this.$().text(), 'totally rejected');
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$().text().trim(), 'totally rejected');
   });
 });
 
-skip('always renders with the last promise set', function (assert) {
+test('always renders with the last promise set', function (assert) {
   let deferred1 = RSVP.defer();
   let deferred2 = RSVP.defer();
   let deferred3 = RSVP.defer();
@@ -94,7 +94,9 @@ skip('always renders with the last promise set', function (assert) {
   this.set('promise', deferred2.promise);
   this.set('promise', deferred3.promise);
 
-  return RSVP.all([deferred1.promise, deferred2.promise, deferred3.promise]).finally(() => {
+  const allPromises = [deferred1, deferred2, deferred3].map(d => d.promise);
+
+  return afterRender(RSVP.all(allPromises)).finally(() => {
     assert.equal(this.$().text().trim(), 'rejected', 'the last set promise is rendered last even when other promises resolve first');
   });
 
