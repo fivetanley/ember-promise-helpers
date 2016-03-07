@@ -58,7 +58,7 @@ promise.). Another `isFulfilled` argument is passed for you to handle
 loading state:
 
 ```handlebars
-{{#await-promise model.author as |author, error, isFulfilled|}}
+{{#await-promise model.author as |author error isFulfilled|}}
   {{#if isFulfilled}}
 
     {{#unless error}}
