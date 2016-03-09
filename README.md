@@ -1,4 +1,4 @@
-Ember Promise Helpers
+Ember Promise Helpers [![Build Status](https://travis-ci.org/fivetanley/ember-promise-helpers.svg?branch=master)](https://travis-ci.org/fivetanley/ember-promise-helpers)
 ------
 
 # Installation
