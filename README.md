@@ -86,7 +86,11 @@ otherwise. Initial value is `null` until the promise is resolved.
 
 ```handlebars
   {{#unless (is-pending promise)}}
-
+    {{#if (is-fulfilled promise)}}
+      Yay it worked!
+    {{else}}
+      Oh :(
+    {{/if}}
   {{/unless}}
 ```
 
