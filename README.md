@@ -28,6 +28,8 @@ Ember templates, without wrapping your objects with something like
 
 # Example Usage
 
+## await
+
 ```handlebars
 {{#if (await model.author)}}
   {{author.name}}
@@ -50,6 +52,71 @@ Or passing it to a component:
 ```handlebars
 {{twitter-timeline users=(await user.following)}}
 ```
+
+## is-pending
+
+Resolves with `false` if the promise resolved or rejected, otherwise
+true until the promise resolves or rejects.
+
+```handlebars
+  {{#if (is-pending promise)}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
+## is-rejected
+
+Resolves with `false` if the promise rejects or fails, false
+otherwise. Initial value is `null` until the promise is resolved.
+
+```handlebars
+  {{#unless (is-pending promise)}}
+    {{#if (is-rejected promise)}}
+      rejected! :(((
+    {{/if}}
+  {{/unless}}
+```
+
+## is-fulfilled
+
+Resolves with `true` if the promise resolved successfully, false
+otherwise. Initial value is `null` until the promise is resolved.
+
+```handlebars
+  {{#unless (is-pending promise)}}
+
+  {{/unless}}
+```
+
+## promise-rejected-reason
+
+Gives you the `error` or `reason` as to why a promise was rejected. Null
+until the promise rejects or if the promise resolves. For example:
+
+```javascript
+// app/controllers/index.js
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+  promise: Ember.computed(function() {
+    return Ember.RSVP.reject(new Error('whoops'));
+  })
+});
+```
+
+```handlebars
+{{! app/templates/index.js }}
+
+{{#if (is-rejected promise)}}
+  The error was {{get (promise-rejected-reason promise) 'message'}}.
+{{/if}}
+```
+
+This would render "The error was whoops."
+
+# Proposed Block Helper syntax (Not implemented!)
 
 If you want to know when a promise becomes rejected or resolved, you can
 use the `await-promise` component, which gives you an `error` property

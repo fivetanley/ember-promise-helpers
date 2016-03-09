@@ -1,5 +1,5 @@
-import { moduleForComponent } from 'ember-qunit';
-import { skip } from 'qunit';
+import { test, moduleForComponent } from 'ember-qunit';
+import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
 import Ember from 'ember';
 
@@ -9,13 +9,15 @@ moduleForComponent('integration - promise-rejected-reason error', {
   integration: true
 });
 
-skip('is false until the promise rejects', function (assert) {
+test('is false until the promise rejects', function (assert) {
   let deferred = RSVP.defer();
   this.set('promise', deferred.promise);
 
   this.render(hbs`
     {{#if (promise-rejected-reason promise)}}
-      {{get (promise-rejected-reason promise) 'message'}}
+      {{#with (promise-rejected-reason promise) as |reason|}}
+        {{reason.message}}
+      {{/with}}
     {{else}}
       Probably not rejected yet.
     {{/if}}
@@ -25,18 +27,20 @@ skip('is false until the promise rejects', function (assert) {
 
   deferred.reject(new Error('nope'));
 
-  return deferred.promise.catch((reason) => {
-    assert.equal(this.$().text().trim(), reason.message, 'false until rejection is known');
+  return afterRender(deferred.promise).then((reason) => {
+    assert.equal(this.$().text().trim(), 'nope', 'false until rejection is known');
   });
 });
 
-skip('is false when the promise resolves', function (assert) {
+test('is false when the promise resolves', function (assert) {
   let deferred = RSVP.defer();
   this.set('promise', deferred.promise);
 
   this.render(hbs`
     {{#if (promise-rejected-reason promise)}}
-      {{get (promise-rejected-reason promise) 'message'}}
+      {{#with (promise-rejected-reason promise) as |reason|}}
+        {{reason.message}}
+      {{/with}}
     {{else}}
       Probably not rejected yet.
     {{/if}}
@@ -44,9 +48,9 @@ skip('is false when the promise resolves', function (assert) {
 
   assert.equal(this.$().text().trim(), 'Probably not rejected yet.', 'false before promise resolves');
 
-  deferred.reject(new Error('nope'));
+  deferred.resolve(true);
 
-  return deferred.promise.then(() => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$().text().trim(), 'Probably not rejected yet.', 'false after promise resolves');
   });
 });
