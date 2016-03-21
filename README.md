@@ -12,7 +12,7 @@ the promise is resolved or rejected. For an example of the problem:
 
 ```handlebars
 {{#if model.author}}
-  The author is: {{author.name}}
+  The author is: {{model.author.name}}
 {{else}}
   No author!
 {{/if}}
@@ -32,7 +32,7 @@ Ember templates, without wrapping your objects with something like
 
 ```handlebars
 {{#if (await model.author)}}
-  {{author.name}}
+  {{model.author.name}}
 {{else}}
   No author!
 {{/if}}
