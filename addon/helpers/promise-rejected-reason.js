@@ -5,9 +5,9 @@ export default AwaitHelper.extend({
     const maybePromise = params[0];
     return this.ensureLatestPromise(maybePromise, (promise) => {
       promise.then(() => {
-        this.setValue(null, promise);
+        this.setValue(null, maybePromise);
       }).catch((reason) => {
-        this.setValue(reason, promise);
+        this.setValue(reason, maybePromise);
       });
     });
   }

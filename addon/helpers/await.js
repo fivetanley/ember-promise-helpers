@@ -21,14 +21,16 @@ export default Ember.Helper.extend({
    * @param hash Object a list of configuration options passed to the helper.
    * This parameter is currently unused by Await.
   */
-  compute(params, hash) {
-    const maybePromise = params[0];
+  compute([maybePromise], hash) {
+    if (!maybePromise || typeof maybePromise.then !== 'function') {
+      return maybePromise;
+    }
 
     return this.ensureLatestPromise(maybePromise, (promise) => {
-      Promise.resolve(promise).then((value) => {
-        this.setValue(value, promise);
+      promise.then((value) => {
+        this.setValue(value, maybePromise);
       }).catch(() => {
-        this.setValue(null, promise);
+        this.setValue(null, maybePromise);
       });
     });
   },
@@ -54,7 +56,7 @@ export default Ember.Helper.extend({
 
     this._promise = promise;
 
-    callback.call(this, Promise.resolve(this._promise));
+    callback.call(this, Promise.resolve(promise));
     return this.get('valueBeforeSettled');
   },
 
@@ -80,7 +82,6 @@ export default Ember.Helper.extend({
   _unsettle() {
     this._wasSettled = false;
     this._promise = null;
-    this.recompute();
   },
 
   /**

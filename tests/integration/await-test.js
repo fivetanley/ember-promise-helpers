@@ -197,3 +197,51 @@ test('always renders with the last promise set', function (assert) {
 
 });
 
+
+test('passes through non-promise values unchanged', function (assert) {
+  this.set('value', 42);
+
+  this.render(hbs`
+    <span id="promise">{{await value}}</span>
+  `);
+
+  assert.equal(this.$('#promise').length, 1);
+  assert.equal(this.$('#promise').text().trim(), '42');
+
+});
+
+test('switching from promise to non-promise correctly ignores promise resolution', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', deferred.promise);
+
+  this.render(hbs`
+    <span id="promise">{{await promise}}</span>
+  `);
+
+  this.set('promise', 'iAmConstant');
+  assert.equal(this.$('#promise').text().trim(), 'iAmConstant');
+  deferred.resolve('promiseFinished');
+
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$('#promise').text().trim(), 'iAmConstant', 'ignores a promise that has been replaced');
+  });
+});
+
+test('promises that get wrapped by RSVP.Promise.resolve still work correctly', function(assert) {
+  let deferred = RSVP.defer();
+  let ObjectPromiseProxy = Ember.ObjectProxy.extend(Ember.PromiseProxyMixin);
+  let proxy = ObjectPromiseProxy.create({
+    promise: deferred.promise
+  });
+  this.set('promise', proxy);
+  this.render(hbs`
+    {{#with (await promise) as |obj|}}
+      <span id="promise">{{obj.foo}}</span>
+    {{/with}}
+  `);
+  deferred.resolve({ foo: 'hasAValue' });
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$('#promise').text().trim(), 'hasAValue');
+  });
+});
