@@ -8,7 +8,7 @@ export default AwaitHelper.extend({
 
     return this.ensureLatestPromise(maybePromise, (promise) => {
       promise.catch(() => {}).finally(() => {
-        this.setValue(false, promise);
+        this.setValue(false, maybePromise);
       });
     });
   }

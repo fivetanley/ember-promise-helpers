@@ -6,9 +6,9 @@ export default AwaitHelper.extend({
 
     return this.ensureLatestPromise(maybePromise, (promise) => {
       promise.then(() => {
-        this.setValue(true, promise);
+        this.setValue(true, maybePromise);
       }).catch(() => {
-        this.setValue(false, promise);
+        this.setValue(false, maybePromise);
       });
     });
   }
