@@ -32,7 +32,7 @@ Ember templates, without wrapping your objects with something like
 
 ```handlebars
 {{#if (await model.author)}}
-  {{model.author.name}}
+  {{get (await model.author) 'name'}}
 {{else}}
   No author!
 {{/if}}
