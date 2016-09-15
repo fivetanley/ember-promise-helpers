@@ -39,7 +39,7 @@ Ember templates, without wrapping your objects with something like
 ```
 
 The `await` helper also works anywhere, because it's just a Handlebars
-subexpression. For example, you can pass it to a another helper...
+subexpression. For example, you can pass it to another helper...
 
 ```handlebars
 {{#each (await model.comments) as |comment|}}
@@ -47,10 +47,16 @@ subexpression. For example, you can pass it to a another helper...
 {{/each}}
 ```
 
-Or passing it to a component:
+Or pass it to a component:
 
 ```handlebars
 {{twitter-timeline users=(await user.following)}}
+```
+
+Or use it by itself:
+
+```handlebars
+{{await model.title}}
 ```
 
 ## is-pending
@@ -68,7 +74,7 @@ true until the promise resolves or rejects.
 
 ## is-rejected
 
-Resolves with `false` if the promise rejects or fails, false
+Resolves with `true` if the promise rejects or fails, false
 otherwise. Initial value is `null` until the promise is resolved.
 
 ```handlebars
@@ -96,7 +102,7 @@ otherwise. Initial value is `null` until the promise is resolved.
 
 ## promise-rejected-reason
 
-Gives you the `error` or `reason` as to why a promise was rejected. Null
+Gives you the `error` or `reason` as to why a promise was rejected. `Null`
 until the promise rejects or if the promise resolves. For example:
 
 ```javascript
