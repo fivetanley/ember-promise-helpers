@@ -53,6 +53,37 @@ Or passing it to a component:
 {{twitter-timeline users=(await user.following)}}
 ```
 
+You can supply a `catch` action which will be called upon promise rejection:
+
+```handlebars
+{{#if (await model.author catch=(action 'error'))}}
+  {{get (await model.author) 'name'}}
+{{else}}
+  {{#if authorError}}
+    Error loading the author: {{authorError}}
+  {{else}}
+    No author!
+  {{/if}}
+{{/if}}
+```
+
+The component, controller or route would have the action:
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Controller.extend({
+
+  actions: {
+    error(err, promise) {
+      this.set('authorError', err.message);
+      // it could also log, redirect, etc
+    }
+  }
+
+});
+```
+
 ## is-pending
 
 Resolves with `false` if the promise resolved or rejected, otherwise
