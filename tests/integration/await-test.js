@@ -52,6 +52,23 @@ test('renders null until the promise is rejected', function (assert) {
   });
 });
 
+test('calls an error handler if a catch action is supplied', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', deferred.promise);
+
+  this.set('errorHandler', (err, promise) => {
+    assert.equal(err.message, 'oops', 'error message reveals reason for rejection');
+    assert.equal(promise, this.get('promise'), 'the promise is the original one passed for context');
+  });
+
+  this.render(hbs`
+    <span id="promise">{{await promise catch=(action errorHandler)}}</span>
+  `);
+
+  deferred.reject(new Error('oops'));
+});
+
 test('changing the promise changes the eventually rendered value', function (assert) {
   let deferred1 = RSVP.defer();
   let deferred2 = RSVP.defer();
