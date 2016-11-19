@@ -8,9 +8,11 @@ Ember Promise Helpers [![Build Status](https://travis-ci.org/fivetanley/ember-pr
 # Description
 
 When Ember's templates encounter a promise, it won't re-render it when
-the promise is resolved or rejected. For an example of the problem:
+the promise is resolved or rejected. For an example of the problem (where model is a specific single model, not an RSVP.hash):
+
 
 ```handlebars
+
 {{#if model.author}}
   The author is: {{model.author.name}}
 {{else}}
