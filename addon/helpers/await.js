@@ -18,7 +18,8 @@ export default Ember.Helper.extend({
    * @method compute
    * @public
    * @param params Array a list of arguments passed to the Helper.
-   * @param hash Object a list of configuration options passed to the helper.
+   * @param hash Object a list of configuration options passed to the helper,
+   * such as the `catch` user-supplied action to deal with rejections
    * This parameter is currently unused by Await.
   */
   compute([maybePromise], hash) {
@@ -29,7 +30,10 @@ export default Ember.Helper.extend({
     return this.ensureLatestPromise(maybePromise, (promise) => {
       promise.then((value) => {
         this.setValue(value, maybePromise);
-      }).catch(() => {
+      }).catch((err) => {
+        if (typeof hash.catch === 'function') {
+          hash.catch.call(this, err, promise);
+        }
         this.setValue(null, maybePromise);
       });
     });
