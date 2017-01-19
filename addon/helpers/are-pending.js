@@ -5,7 +5,8 @@ const {RSVP} = Ember;
 
 export default IsPendingHelper.extend({
   compute(params, hash) {
-    const maybePromises = RSVP.all(params);
+    const args = Array.isArray(params[0]) ? params[0] : params;
+    const maybePromises = RSVP.all(args);
 
     return this._super([maybePromises], hash);
   },

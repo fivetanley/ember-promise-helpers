@@ -93,3 +93,32 @@ test('always renders with the last promises set', function (assert) {
   });
 
 });
+
+test('it also works with an array as first parameter', function (assert) {
+  let deferred1 = RSVP.defer();
+  let deferred2 = RSVP.defer();
+
+  this.set('promises', [deferred1.promise, deferred2.promise]);
+
+  this.render(hbs`
+    {{#if (are-pending promises)}}
+      Pending!
+    {{else}}
+      Done!
+    {{/if}}
+  `);
+
+  assert.equal(this.$().text().trim(), 'Pending!', 'is-pending is true before resolved');
+
+  deferred1.resolve('resolved!');
+
+  return afterRender(deferred1.promise).then(() => {
+    assert.equal(this.$().text().trim(), 'Pending!', 'is-pending is false after resolved');
+
+    deferred2.resolve('resolved!');
+
+    return afterRender(deferred2.promise);
+  }).then(() => {
+    assert.equal(this.$().text().trim(), 'Done!', 'is-pending is false after resolved');
+  });
+});
