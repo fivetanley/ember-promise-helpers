@@ -68,6 +68,20 @@ true until the promise resolves or rejects.
   {{/if}}
 ```
 
+## are-pending
+
+It's the same as `is-pending` but also accept `1..n` promises using the `Ember.RSVP.all` function.
+Resolves with `false` if all promises are resolved or some promise is rejected, otherwise
+true until all the promises resolves or rejects.
+
+```handlebars
+  {{#if (are-pending promise1 promise2 promise3)}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
 ## is-rejected
 
 Resolves with `false` if the promise rejects or fails, false
