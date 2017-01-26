@@ -68,29 +68,6 @@ true until the promise resolves or rejects.
   {{/if}}
 ```
 
-## are-pending
-
-It's the same as `is-pending` but also accepts `1..n` promises using the `Ember.RSVP.all` function (as arguments or array).
-Resolves with `false` if all promises are resolved or some promise is rejected, otherwise
-true until all the promises resolves or rejects.
-
-```handlebars
-  {{#if (are-pending promise1 promise2 promise3)}}
-    <img src="loading.gif"/>
-  {{else}}
-    Loaded!
-  {{/if}}
-```
-
-
-```handlebars
-  {{#if (are-pending promisesArray)}}
-    <img src="loading.gif"/>
-  {{else}}
-    Loaded!
-  {{/if}}
-```
-
 ## is-rejected
 
 Resolves with `false` if the promise rejects or fails, false
@@ -141,6 +118,42 @@ export default Ember.Controller.extend({
 {{#if (is-rejected promise)}}
   The error was {{get (promise-rejected-reason promise) 'message'}}.
 {{/if}}
+```
+
+## promise-all
+
+Uses the `Ember.RSVP.all` function to create a promise.
+It also accepts `1..n` promises as arguments or an array as first argument.
+
+
+```handlebars
+  {{#if (is-pending (promise-all promise1 promise2))}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
+
+```handlebars
+  {{#if (is-pending (promise-all promiseArray))}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
+## promise-all
+
+Uses the `Ember.RSVP.hash` function to create a promise.
+
+
+```handlebars
+  {{#if (is-pending (promise-all foo=promise1 bar=promise2))}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
 ```
 
 This would render "The error was whoops."
