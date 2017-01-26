@@ -143,7 +143,7 @@ It also accepts `1..n` promises as arguments or an array as first argument.
   {{/if}}
 ```
 
-## promise-all
+## promise-hash
 
 Uses the `Ember.RSVP.hash` function to create a promise.
 
