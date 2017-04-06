@@ -1,1 +1,1 @@
-export { default, await } from 'ember-promise-helpers/helpers/await';
+export { default, awaitFor } from 'ember-promise-helpers/helpers/await';
