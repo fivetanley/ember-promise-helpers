@@ -126,6 +126,42 @@ export default Ember.Controller.extend({
 {{/if}}
 ```
 
+## promise-all
+
+Uses the `Ember.RSVP.all` function to create a promise.
+It also accepts `1..n` promises as arguments or an array as first argument.
+
+
+```handlebars
+  {{#if (is-pending (promise-all promise1 promise2))}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
+
+```handlebars
+  {{#if (is-pending (promise-all promiseArray))}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
+## promise-hash
+
+Uses the `Ember.RSVP.hash` function to create a promise.
+
+
+```handlebars
+  {{#if (is-pending (promise-all foo=promise1 bar=promise2))}}
+    <img src="loading.gif"/>
+  {{else}}
+    Loaded!
+  {{/if}}
+```
+
 This would render "The error was whoops."
 
 # Proposed Block Helper syntax (Not implemented!)
