@@ -28,7 +28,12 @@ export default Ember.Helper.extend({
 
     return this.ensureLatestPromise(maybePromise, (promise) => {
       promise.then((value) => {
-        this.setValue(value, maybePromise);
+        if (Ember.isPresent(value)) {
+          this.setValue(value, maybePromise);
+        }
+        else {
+          this.setValue(true, maybePromise);
+        }
       }).catch(() => {
         this.setValue(null, maybePromise);
       });
