@@ -245,3 +245,32 @@ test('promises that get wrapped by RSVP.Promise.resolve still work correctly', f
     assert.equal(this.$('#promise').text().trim(), 'hasAValue');
   });
 });
+
+test('works with block-if when promise resolves', function (assert) {
+  let deferred = RSVP.defer();
+
+  this.set('promise', deferred.promise);
+
+  this.render(hbs`
+    <span id="promise">
+      {{#if (await promise)}}
+        {{promise.text}}
+      {{else}}
+        Nope!
+      {{/if}}
+    </span>
+  `);
+
+  assert.equal(this.$('#promise').length, 1);
+  assert.equal(this.$('#promise').text().trim(), 'Nope!');
+
+  const result = {
+    text: 'yass!'
+  };
+
+  deferred.resolve(result);
+
+  return afterRender(deferred.promise).then(() => {
+    assert.equal(this.$('#promise').text().trim(), result.text, 're-renders when the promise is resolved');
+  });
+});
