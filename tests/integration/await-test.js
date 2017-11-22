@@ -1,9 +1,11 @@
+import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+import ObjectProxy from '@ember/object/proxy';
+import { later } from '@ember/runloop';
+import $ from 'jquery';
+import RSVP from 'rsvp';
 import { test, moduleForComponent } from 'ember-qunit';
 import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
-import Ember from 'ember';
-
-const {RSVP} = Ember;
 
 moduleForComponent('integration - await helper', {
   integration: true,
@@ -104,7 +106,7 @@ test('works with {{#each}} when promise resolves', function (assert) {
     assert.equal(lis.length, 3);
 
     let text = lis.map((i, el) => {
-      return Ember.$(el).text().trim();
+      return $(el).text().trim();
     }).toArray();
 
     assert.equal(text.join(' '), 'Katie Jenny Anna');
@@ -185,8 +187,8 @@ test('always renders with the last promise set', function (assert) {
 
   deferred1.resolve('number 1');
 
-  Ember.run.later(deferred2, 'resolve', 'number 2', 200);
-  Ember.run.later(deferred3, 'resolve', 'number 3', 500);
+  later(deferred2, 'resolve', 'number 2', 200);
+  later(deferred3, 'resolve', 'number 3', 500);
 
   this.set('promise', deferred2.promise);
   this.set('promise', deferred3.promise);
@@ -230,7 +232,7 @@ test('switching from promise to non-promise correctly ignores promise resolution
 
 test('promises that get wrapped by RSVP.Promise.resolve still work correctly', function(assert) {
   let deferred = RSVP.defer();
-  let ObjectPromiseProxy = Ember.ObjectProxy.extend(Ember.PromiseProxyMixin);
+  let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
   let proxy = ObjectPromiseProxy.create({
     promise: deferred.promise
   });
