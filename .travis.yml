@@ -22,10 +22,6 @@ matrix:
   allow_failures:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
-before_install:
-  - npm install -g phantomjs-prebuilt@2
-  - npm install -g bower
-
 install:
   - npm install
   - bower install

@@ -2,7 +2,7 @@
   "name": "ember-promise-helpers",
   "version": "1.0.3",
   "description": "Helpers for dealing with promises in your ember tempaltes.",
-  "repository": "fivetanley/ember-promise-helpers",
+  "repository": "",
   "keywords": [
     "ember-addon"
   ],
@@ -12,7 +12,6 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
@@ -22,6 +21,7 @@
     "ember-cli-babel": "^6.6.0"
   },
   "devDependencies": {
+    "bower": "^1.8.2",
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^3.0.0",
     "ember-cli": "~2.16.2",
