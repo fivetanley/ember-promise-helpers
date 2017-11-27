@@ -2,6 +2,7 @@
   "name": "ember-promise-helpers",
   "version": "1.0.3",
   "description": "Helpers for dealing with promises in your ember tempaltes.",
+  "repository": "fivetanley/ember-promise-helpers",
   "keywords": [
     "ember-addon"
   ],
