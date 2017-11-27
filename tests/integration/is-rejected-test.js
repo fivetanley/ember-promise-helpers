@@ -56,21 +56,29 @@ test('renders false when given already fulfilled promise', function (assert) {
 });
 
 test('evaluates to true given an already rejected promise', function (assert) {
-  let deferred = RSVP.defer();
+  // rejecting because ember fails the test immediately for some reason
+  // when rejecting immediately... sigh
+  let promise = new RSVP.Promise((_, reject) => {
+    Ember.run.later(() => {
+      reject(new Error('nooooo :('));
+    }, 100);
+  });
 
-  deferred.reject(new Error('nooooo :('));
+  return promise.catch(() => {
 
-  this.set('promise', deferred.promise);
+  }).then(() => {
+    this.set('promise', promise);
 
-  this.render(hbs`
-    {{#if (is-rejected promise)}}
-      {{is-rejected promise}}
-    {{else}}
-      totally rejected
-    {{/if}}
-  `);
+    this.render(hbs`
+      {{#if (is-rejected promise)}}
+        {{is-rejected promise}}
+      {{else}}
+        totally rejected
+      {{/if}}
+    `);
 
-  return afterRender(deferred.promise).then(() => {
+    return afterRender(promise);
+  }).then(() => {
     assert.equal(this.$().text().trim(), 'true');
   });
 });
