@@ -197,8 +197,7 @@ loading state:
 ## Development Installation
 
 * `git clone` this repository
-* `npm install`
-* `bower install`
+* `yarn`
 
 ## Running
 

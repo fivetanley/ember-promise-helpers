@@ -6,8 +6,7 @@ node_js:
 sudo: false
 
 cache:
-  directories:
-    - node_modules
+  yarn: true
 
 env:
   - EMBER_TRY_SCENARIO=ember-default
@@ -23,8 +22,7 @@ matrix:
     - env: EMBER_TRY_SCENARIO=ember-canary
 
 install:
-  - npm install
-  - bower install
+  - yarn install --no-lockfile
 
 script:
-  - ember try:one $EMBER_TRY_SCENARIO --- ember test
+  - ember try:each --skip-cleanup
