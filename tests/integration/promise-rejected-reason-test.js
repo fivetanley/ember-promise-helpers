@@ -27,7 +27,7 @@ test('is false until the promise rejects', function (assert) {
 
   deferred.reject(new Error('nope'));
 
-  return afterRender(deferred.promise).then((reason) => {
+  return afterRender(deferred.promise).then(() => {
     assert.equal(this.$().text().trim(), 'nope', 'false until rejection is known');
   });
 });

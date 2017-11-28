@@ -21,7 +21,7 @@ export default Ember.Helper.extend({
    * @param hash Object a list of configuration options passed to the helper.
    * This parameter is currently unused by Await.
   */
-  compute([maybePromise], hash) {
+  compute([maybePromise]) {
     if (!maybePromise || typeof maybePromise.then !== 'function') {
       return maybePromise;
     }

@@ -124,7 +124,7 @@ test('works with promise-rejected-reason helper', function (assert) {
 
   deferred1.reject(new Error('nope'));
 
-  return afterRender(RSVP.all([promise1, promise2])).then((reason) => {
+  return afterRender(RSVP.all([promise1, promise2])).then(() => {
     assert.equal(this.$().text().trim(), 'nope', 'false until rejection is known');
   });
 });
