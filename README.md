@@ -155,7 +155,7 @@ Uses the `Ember.RSVP.hash` function to create a promise.
 
 
 ```handlebars
-  {{#if (is-pending (promise-all foo=promise1 bar=promise2))}}
+  {{#if (is-pending (promise-hash foo=promise1 bar=promise2))}}
     <img src="loading.gif"/>
   {{else}}
     Loaded!
