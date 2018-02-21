@@ -1,9 +1,8 @@
+import { later } from '@ember/runloop';
+import RSVP from 'rsvp';
 import { test, moduleForComponent } from 'ember-qunit';
 import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
-import Ember from 'ember';
-
-const {RSVP} = Ember;
 
 moduleForComponent('integration - is-fulfilled helper', {
   integration: true,
@@ -59,7 +58,7 @@ test('evaluates to falsy given already rejected promise', function (assert) {
   // rejecting because ember fails the test immediately for some reason
   // when rejecting immediately... sigh
   let promise = new RSVP.Promise((_, reject) => {
-    Ember.run.later(() => {
+    later(() => {
       reject(new Error('nooooo :('));
     }, 100);
   });
@@ -94,8 +93,8 @@ test('always renders with the last promise set', function (assert) {
 
   deferred1.resolve('number 1');
 
-  Ember.run.later(deferred2, 'resolve', 'number 2', 200);
-  Ember.run.later(deferred3, 'reject', new Error('nope'));
+  later(deferred2, 'resolve', 'number 2', 200);
+  later(deferred3, 'reject', new Error('nope'));
 
   this.set('promise', deferred2.promise);
   this.set('promise', deferred3.promise);

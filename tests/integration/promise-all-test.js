@@ -1,9 +1,7 @@
+import RSVP from 'rsvp';
 import { test, moduleForComponent } from 'ember-qunit';
 import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
-import Ember from 'ember';
-
-const {RSVP} = Ember;
 let deferred1, deferred2;
 let promise1, promise2;
 

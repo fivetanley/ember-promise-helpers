@@ -1,8 +1,7 @@
-import Ember from 'ember';
+import Helper from '@ember/component/helper';
+import RSVP from 'rsvp';
 
-const { RSVP } = Ember;
-
-export default Ember.Helper.extend({
+export default Helper.extend({
   compute(params) {
     const args = Array.isArray(params[0]) ? params[0] : params;
 

@@ -1,9 +1,8 @@
-import Ember from 'ember';
-
-const {RSVP} = Ember;
+import Helper from '@ember/component/helper';
+import RSVP from 'rsvp';
 const {Promise} = RSVP;
 
-export default Ember.Helper.extend({
+export default Helper.extend({
   /**
    * @property valueBeforeSettled
    * @default null
