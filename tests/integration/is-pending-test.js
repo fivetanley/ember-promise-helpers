@@ -1,9 +1,8 @@
+import { later } from '@ember/runloop';
+import RSVP from 'rsvp';
 import { test, moduleForComponent } from 'ember-qunit';
 import afterRender from 'dummy/tests/helpers/after-render';
 import hbs from 'htmlbars-inline-precompile';
-import Ember from 'ember';
-
-const {RSVP} = Ember;
 
 moduleForComponent('integration - is-pending helper', {
   integration: true
@@ -66,7 +65,7 @@ test('always renders with the last promise set', function (assert) {
 
   deferred1.resolve('number 1');
 
-  Ember.run.later(deferred2, 'resolve', 'number 2', 200);
+  later(deferred2, 'resolve', 'number 2', 200);
   // We don't resolve deferred3 so is-pending should be true
 
   this.set('promise', deferred2.promise);
