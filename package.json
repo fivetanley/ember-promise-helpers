@@ -1,6 +1,6 @@
 {
   "name": "ember-promise-helpers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Helpers for dealing with promises in your ember tempaltes.",
   "repository": "",
   "keywords": [
