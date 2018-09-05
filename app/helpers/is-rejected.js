@@ -1,1 +1,1 @@
-export { default, isRejected } from 'ember-promise-helpers/helpers/is-rejected';
+export { default } from 'ember-promise-helpers/helpers/is-rejected';

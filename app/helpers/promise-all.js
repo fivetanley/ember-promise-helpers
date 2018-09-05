@@ -1,1 +1,1 @@
-export { default, promiseAll } from 'ember-promise-helpers/helpers/promise-all';
+export { default } from 'ember-promise-helpers/helpers/promise-all';

@@ -1,1 +1,1 @@
-export { default, isFulfilled } from 'ember-promise-helpers/helpers/is-fulfilled';
+export { default } from 'ember-promise-helpers/helpers/is-fulfilled';

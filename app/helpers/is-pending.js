@@ -1,1 +1,1 @@
-export { default, isPending } from 'ember-promise-helpers/helpers/is-pending';
+export { default } from 'ember-promise-helpers/helpers/is-pending';
