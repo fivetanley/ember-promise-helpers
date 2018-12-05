@@ -1,6 +1,6 @@
 {
   "name": "ember-promise-helpers",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Helpers for dealing with promises in your ember templates.",
   "repository": "https://github.com/fivetanley/ember-promise-helpers.git",
   "keywords": [

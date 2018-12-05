@@ -1,6 +1,11 @@
 Changelog
 ------
 
+### 1.0.7 (December 4, 2018)
+
+- remove re-exports of non-existant names [32](https://github.com/fivetanley/ember-promise-helpers/pull/32) by @ef4
+- fix typo [33](https://github.com/fivetanley/ember-promise-helpers/pull/33) by @kellyselden
+
 ### 1.0.3 (April 26, 2017)
 
 - Support 1..n promises by @josex2r [18](https://github.com/fivetanley/ember-promise-helpers/pull/18)
