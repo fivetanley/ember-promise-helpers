@@ -1,1 +1,1 @@
-export { default, promiseHash } from 'ember-promise-helpers/helpers/promise-hash';
+export { default } from 'ember-promise-helpers/helpers/promise-hash';
