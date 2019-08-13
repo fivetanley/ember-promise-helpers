@@ -21,8 +21,7 @@
     "test:all": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.16.0",
-    "ember-cli-update": "^0.34.10"
+    "ember-cli-babel": "^6.16.0"
   },
   "devDependencies": {
     "@ember/optional-features": "^0.6.3",
