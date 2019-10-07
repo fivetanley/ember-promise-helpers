@@ -5,7 +5,7 @@
   "keywords": [
     "ember-addon"
   ],
-  "repository": "",
+  "repository": "https://github.com/fivetanley/ember-promise-helpers",
   "license": "MIT",
   "author": "",
   "directories": {
