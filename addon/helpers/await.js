@@ -56,7 +56,7 @@ export default Helper.extend({
     this._promise = promise;
 
     callback.call(this, Promise.resolve(promise));
-    return this.get('valueBeforeSettled');
+    return this.valueBeforeSettled;
   },
 
   /**
