@@ -7,10 +7,10 @@ import afterRender from 'dummy/tests/helpers/after-render';
 let deferred1, deferred2;
 let promise1, promise2;
 
-module('integration - promise-hash helper', function(hooks) {
+module('integration - promise-hash helper', function (hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     deferred1 = RSVP.defer();
     deferred2 = RSVP.defer();
     promise1 = deferred1.promise;
@@ -20,7 +20,7 @@ module('integration - promise-hash helper', function(hooks) {
     this.set('promise2', promise2);
   });
 
-  test('works with await helper', async function(assert) {
+  test('works with await helper', async function (assert) {
     await render(hbs`
       {{#with (await (promise-hash promise1=promise1 promise2=promise2)) as |promiseAll|}}
         <span id="promise1">{{promiseAll.promise1}}</span>
@@ -33,19 +33,31 @@ module('integration - promise-hash helper', function(hooks) {
 
     deferred1.resolve('promise1 resolved');
 
-    return afterRender(promise1).then(() => {
-      assert.dom('#promise1').doesNotExist();
-      assert.dom('#promise2').doesNotExist();
-      deferred2.resolve('promise2 resolved');
+    return afterRender(promise1)
+      .then(() => {
+        assert.dom('#promise1').doesNotExist();
+        assert.dom('#promise2').doesNotExist();
+        deferred2.resolve('promise2 resolved');
 
-      return afterRender(promise2);
-    }).then(() => {
-      assert.dom('#promise1').hasText('promise1 resolved', 're-renders when the first promise is resolved');
-      assert.dom('#promise2').hasText('promise2 resolved', 're-renders when the first promise is resolved');
-    });
+        return afterRender(promise2);
+      })
+      .then(() => {
+        assert
+          .dom('#promise1')
+          .hasText(
+            'promise1 resolved',
+            're-renders when the first promise is resolved'
+          );
+        assert
+          .dom('#promise2')
+          .hasText(
+            'promise2 resolved',
+            're-renders when the first promise is resolved'
+          );
+      });
   });
 
-  test('works with is-fulfilled helper', async function(assert) {
+  test('works with is-fulfilled helper', async function (assert) {
     await render(hbs`
       {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
         {{#if (is-fulfilled promiseAll)}}
@@ -60,18 +72,21 @@ module('integration - promise-hash helper', function(hooks) {
 
     deferred1.resolve('yay!');
 
-    return afterRender(promise1).then(() => {
-      assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
-      deferred2.resolve('yay!');
+    return afterRender(promise1)
+      .then(() => {
+        assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
+        deferred2.resolve('yay!');
 
-      return afterRender(promise2);
-    }).then(() => {
-      assert.dom('*').hasText('true', 'value changes and template re-renders');
-    });
+        return afterRender(promise2);
+      })
+      .then(() => {
+        assert
+          .dom('*')
+          .hasText('true', 'value changes and template re-renders');
+      });
   });
 
-
-  test('works with is-pending helper', async function(assert) {
+  test('works with is-pending helper', async function (assert) {
     await render(hbs`
       {{#if (is-pending (promise-hash promise1=promise1 promise2=promise2))}}
         Pending!
@@ -84,17 +99,21 @@ module('integration - promise-hash helper', function(hooks) {
 
     deferred1.resolve('resolved!');
 
-    return afterRender(promise1).then(() => {
-      assert.dom('*').hasText('Pending!', 'is-pending is true before resolved');
-      deferred2.resolve('resolved!');
+    return afterRender(promise1)
+      .then(() => {
+        assert
+          .dom('*')
+          .hasText('Pending!', 'is-pending is true before resolved');
+        deferred2.resolve('resolved!');
 
-      return afterRender(promise2);
-    }).then(() => {
-      assert.dom('*').hasText('Done!', 'is-pending is false after resolved');
-    });
+        return afterRender(promise2);
+      })
+      .then(() => {
+        assert.dom('*').hasText('Done!', 'is-pending is false after resolved');
+      });
   });
 
-  test('works with is-rejected helper', async function(assert) {
+  test('works with is-rejected helper', async function (assert) {
     await render(hbs`
       {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
         {{#if (is-rejected promiseAll)}}
@@ -114,7 +133,7 @@ module('integration - promise-hash helper', function(hooks) {
     });
   });
 
-  test('works with promise-rejected-reason helper', async function(assert) {
+  test('works with promise-rejected-reason helper', async function (assert) {
     await render(hbs`
       {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
         {{#if (promise-rejected-reason promiseAll)}}
@@ -127,7 +146,9 @@ module('integration - promise-hash helper', function(hooks) {
       {{/with}}
     `);
 
-    assert.dom('*').hasText('Probably not rejected yet.', 'false until rejection is known');
+    assert
+      .dom('*')
+      .hasText('Probably not rejected yet.', 'false until rejection is known');
 
     deferred1.reject(new Error('nope'));
 

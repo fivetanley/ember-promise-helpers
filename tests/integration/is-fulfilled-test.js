@@ -6,14 +6,12 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
 
-module('integration - is-fulfilled helper', function(hooks) {
+module('integration - is-fulfilled helper', function (hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {});
 
-  });
-
-  test('evaluates to false until the promise is resolved', async function(assert) {
+  test('evaluates to false until the promise is resolved', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -35,7 +33,7 @@ module('integration - is-fulfilled helper', function(hooks) {
     });
   });
 
-  test('renders true when given already fulfilled promise', async function(assert) {
+  test('renders true when given already fulfilled promise', async function (assert) {
     let deferred = RSVP.defer();
 
     deferred.resolve('omg!');
@@ -64,24 +62,26 @@ module('integration - is-fulfilled helper', function(hooks) {
       }, 100);
     });
 
-    return promise.catch(() => {
-    }).then(async () => {
-      this.set('promise', promise);
+    return promise
+      .catch(() => {})
+      .then(async () => {
+        this.set('promise', promise);
 
-      await render(hbs`
+        await render(hbs`
         {{#if (is-fulfilled promise)}}
           {{is-fulfilled promise}}
         {{else}}
           totally rejected
         {{/if}}
       `);
-      return afterRender(promise);
-    }).then(() => {
-      assert.dom('*').hasText('totally rejected');
-    });
+        return afterRender(promise);
+      })
+      .then(() => {
+        assert.dom('*').hasText('totally rejected');
+      });
   });
 
-  test('always renders with the last promise set', async function(assert) {
+  test('always renders with the last promise set', async function (assert) {
     let deferred1 = RSVP.defer();
     let deferred2 = RSVP.defer();
     let deferred3 = RSVP.defer();
@@ -100,15 +100,15 @@ module('integration - is-fulfilled helper', function(hooks) {
     this.set('promise', deferred2.promise);
     this.set('promise', deferred3.promise);
 
-    const allPromises = [deferred1, deferred2, deferred3].map(d => d.promise);
+    const allPromises = [deferred1, deferred2, deferred3].map((d) => d.promise);
 
     return afterRender(RSVP.all(allPromises)).finally(() => {
-      assert.dom('*').hasText(
-        'rejected',
-        'the last set promise is rendered last even when other promises resolve first'
-      );
+      assert
+        .dom('*')
+        .hasText(
+          'rejected',
+          'the last set promise is rendered last even when other promises resolve first'
+        );
     });
-
   });
 });
-

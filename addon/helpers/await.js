@@ -1,6 +1,6 @@
 import Helper from '@ember/component/helper';
 import RSVP from 'rsvp';
-const {Promise} = RSVP;
+const { Promise } = RSVP;
 
 export default Helper.extend({
   /**
@@ -10,7 +10,7 @@ export default Helper.extend({
    * This is the value that gets returned synchronously as the helper's return
    * value before the promise is settled. For example `{{async promise}}` will return
    * null, before the promise is resolved or rejected.
-  */
+   */
   valueBeforeSettled: null,
 
   /**
@@ -19,18 +19,20 @@ export default Helper.extend({
    * @param params Array a list of arguments passed to the Helper.
    * @param hash Object a list of configuration options passed to the helper.
    * This parameter is currently unused by Await.
-  */
+   */
   compute([maybePromise]) {
     if (!maybePromise || typeof maybePromise.then !== 'function') {
       return maybePromise;
     }
 
     return this.ensureLatestPromise(maybePromise, (promise) => {
-      promise.then((value) => {
-        this.setValue(value, maybePromise);
-      }).catch(() => {
-        this.setValue(null, maybePromise);
-      });
+      promise
+        .then((value) => {
+          this.setValue(value, maybePromise);
+        })
+        .catch(() => {
+          this.setValue(null, maybePromise);
+        });
     });
   },
 
@@ -45,7 +47,7 @@ export default Helper.extend({
    * same as before, then just return the value to `compute`. Otherwise, call
    * the callback so the user can call `then`, `catch`, or `finally` on the
    * promise to update the value using `setValue` later.
-  */
+   */
   ensureLatestPromise(promise, callback) {
     if (this._wasSettled && promise === this._promise) {
       return this._value;
@@ -62,7 +64,7 @@ export default Helper.extend({
   /**
    * @method _settle
    * @private
-  */
+   */
   _settle(promise) {
     if (this.allowUpdates(promise)) {
       this._wasSettled = true;
@@ -77,7 +79,7 @@ export default Helper.extend({
    * Resets the promise to null and calls recompute. Designed to be used
    * when a new promise is passed to the `compute` method. This would happen
    * when the value changes in Handlebars.
-  */
+   */
   _unsettle() {
     this._wasSettled = false;
     this._promise = null;
@@ -121,7 +123,7 @@ export default Helper.extend({
    * Even though `promise2` already resolved with "goodbye", the template would
    * render "hello", which is not the intended behavior. So, `setValue` makes you pass
    * the promise so the internal book-keeping can ensure the last-set promise always wins.
-  */
+   */
   setValue(value, promise) {
     if (this.allowUpdates(promise)) {
       this._value = value;
@@ -131,5 +133,5 @@ export default Helper.extend({
 
   allowUpdates(promise) {
     return this._promise === promise;
-  }
+  },
 });

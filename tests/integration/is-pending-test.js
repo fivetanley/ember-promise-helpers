@@ -6,10 +6,10 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
 
-module('integration - is-pending helper', function(hooks) {
+module('integration - is-pending helper', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('is true until the promise resolves', async function(assert) {
+  test('is true until the promise resolves', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -31,7 +31,7 @@ module('integration - is-pending helper', function(hooks) {
     });
   });
 
-  test('is true until the promise rejects', async function(assert) {
+  test('is true until the promise rejects', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -53,7 +53,7 @@ module('integration - is-pending helper', function(hooks) {
     });
   });
 
-  test('always renders with the last promise set', async function(assert) {
+  test('always renders with the last promise set', async function (assert) {
     let deferred1 = RSVP.defer();
     let deferred2 = RSVP.defer();
     let deferred3 = RSVP.defer();
@@ -72,15 +72,15 @@ module('integration - is-pending helper', function(hooks) {
     this.set('promise', deferred2.promise);
     this.set('promise', deferred3.promise);
 
-    const promises = [deferred1, deferred2].map(d => d.promise);
+    const promises = [deferred1, deferred2].map((d) => d.promise);
 
     return afterRender(RSVP.all(promises)).then(() => {
-      assert.dom('*').hasText(
-        'pending',
-        'the last set promise is rendered last even when other promises resolve first'
-      );
+      assert
+        .dom('*')
+        .hasText(
+          'pending',
+          'the last set promise is rendered last even when other promises resolve first'
+        );
     });
-
   });
 });
-
