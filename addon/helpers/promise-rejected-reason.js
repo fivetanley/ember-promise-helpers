@@ -1,16 +1,15 @@
 import AwaitHelper from './await';
 
-export default AwaitHelper.extend({
+export default class extends AwaitHelper {
   compute(params) {
     const maybePromise = params[0];
-    return this.ensureLatestPromise(maybePromise, (promise) => {
-      promise
-        .then(() => {
-          this.setValue(null, maybePromise);
-        })
-        .catch((reason) => {
-          this.setValue(reason, maybePromise);
-        });
+    return this.ensureLatestPromise(maybePromise, async (promise) => {
+      try {
+        await promise;
+        this.setValue(null, maybePromise);
+      } catch (reason) {
+        this.setValue(reason, maybePromise);
+      }
     });
-  },
-});
+  }
+}
