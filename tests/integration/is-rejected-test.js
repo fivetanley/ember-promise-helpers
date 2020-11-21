@@ -1,10 +1,10 @@
+import { hbs } from 'ember-cli-htmlbars';
 import { later } from '@ember/runloop';
 import RSVP from 'rsvp';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
-import hbs from 'htmlbars-inline-precompile';
 
 module('integration - is-rejected helper', function(hooks) {
   setupRenderingTest(hooks);

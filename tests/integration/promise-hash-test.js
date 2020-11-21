@@ -1,9 +1,9 @@
+import { hbs } from 'ember-cli-htmlbars';
 import RSVP from 'rsvp';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
-import hbs from 'htmlbars-inline-precompile';
 let deferred1, deferred2;
 let promise1, promise2;
 

@@ -1,3 +1,4 @@
+import { hbs } from 'ember-cli-htmlbars';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 import ObjectProxy from '@ember/object/proxy';
 import { later } from '@ember/runloop';
@@ -6,7 +7,6 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render, findAll } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
-import hbs from 'htmlbars-inline-precompile';
 
 module('integration - await helper', function(hooks) {
   setupRenderingTest(hooks);
