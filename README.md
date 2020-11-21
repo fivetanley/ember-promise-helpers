@@ -1,4 +1,4 @@
-Ember Promise Helpers [![Build Status](https://travis-ci.org/fivetanley/ember-promise-helpers.svg?branch=master)](https://travis-ci.org/fivetanley/ember-promise-helpers)
+Ember Promise Helpers ![main branch build](https://github.com/fivetanley/ember-promise-helpers/workflows/test/badge.svg?branch=main)
 ------
 
 # Installation
