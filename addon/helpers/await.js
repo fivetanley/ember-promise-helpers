@@ -1,8 +1,7 @@
 import Helper from '@ember/component/helper';
-import RSVP from 'rsvp';
-const { Promise } = RSVP;
+import { Promise } from 'rsvp';
 
-export default Helper.extend({
+export default class extends Helper {
   /**
    * @property valueBeforeSettled
    * @default null
@@ -11,7 +10,10 @@ export default Helper.extend({
    * value before the promise is settled. For example `{{async promise}}` will return
    * null, before the promise is resolved or rejected.
    */
-  valueBeforeSettled: null,
+  constructor(...args) {
+    super(...args);
+    this.valueBeforeSettled = null;
+  }
 
   /**
    * @method compute
@@ -25,16 +27,15 @@ export default Helper.extend({
       return maybePromise;
     }
 
-    return this.ensureLatestPromise(maybePromise, (promise) => {
-      promise
-        .then((value) => {
-          this.setValue(value, maybePromise);
-        })
-        .catch(() => {
-          this.setValue(null, maybePromise);
-        });
+    return this.ensureLatestPromise(maybePromise, async (promise) => {
+      try {
+        const value = await promise;
+        this.setValue(value, maybePromise);
+      } catch (_error) {
+        this.setValue(null, maybePromise);
+      }
     });
-  },
+  }
 
   /**
    * @method ensureLatestPromise
@@ -59,7 +60,7 @@ export default Helper.extend({
 
     callback.call(this, Promise.resolve(promise));
     return this.valueBeforeSettled;
-  },
+  }
 
   /**
    * @method _settle
@@ -70,7 +71,7 @@ export default Helper.extend({
       this._wasSettled = true;
       this.recompute();
     }
-  },
+  }
 
   /**
    * @private
@@ -83,7 +84,7 @@ export default Helper.extend({
   _unsettle() {
     this._wasSettled = false;
     this._promise = null;
-  },
+  }
 
   /**
    * @method setValue
@@ -129,9 +130,9 @@ export default Helper.extend({
       this._value = value;
       this._settle(promise);
     }
-  },
+  }
 
   allowUpdates(promise) {
     return this._promise === promise;
-  },
-});
+  }
+}
