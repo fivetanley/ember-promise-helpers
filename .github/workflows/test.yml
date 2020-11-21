@@ -19,7 +19,7 @@ jobs:
           - canary
           - beta
 
-    name: Client tests 
+    name: Build
     steps:
       - name: Check out a copy of the repo
         uses: actions/checkout@v2
