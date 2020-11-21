@@ -39,7 +39,7 @@
     "ember-qunit": "^4.0.0",
     "ember-resolver": "^5.0.1",
     "ember-source": "^3.20.0",
-    "ember-source-channel-url": "^1.1.0",
+    "ember-source-channel-url": "^3.0.0",
     "ember-template-lint": "^2.0.0",
     "ember-try": "^1.4.0",
     "ember-welcome-page": "^3.0.0",
