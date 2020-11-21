@@ -8,14 +8,12 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render, findAll } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
 
-module('integration - await helper', function(hooks) {
+module('integration - await helper', function (hooks) {
   setupRenderingTest(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {});
 
-  });
-
-  test('renders null until the promise is resolved', async function(assert) {
+  test('renders null until the promise is resolved', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -32,11 +30,13 @@ module('integration - await helper', function(hooks) {
     deferred.resolve(text);
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('#promise').hasText(text, 're-renders when the promise is resolved');
+      assert
+        .dom('#promise')
+        .hasText(text, 're-renders when the promise is resolved');
     });
   });
 
-  test('renders null until the promise is rejected', async function(assert) {
+  test('renders null until the promise is rejected', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -50,11 +50,13 @@ module('integration - await helper', function(hooks) {
     deferred.reject(new Error('oops'));
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('#promise').hasText('', 'value of re-render does not reveal reason for rejection');
+      assert
+        .dom('#promise')
+        .hasText('', 'value of re-render does not reveal reason for rejection');
     });
   });
 
-  test('changing the promise changes the eventually rendered value', async function(assert) {
+  test('changing the promise changes the eventually rendered value', async function (assert) {
     let deferred1 = RSVP.defer();
     let deferred2 = RSVP.defer();
 
@@ -69,16 +71,20 @@ module('integration - await helper', function(hooks) {
 
     deferred1.resolve(deferred1Text);
 
-    return afterRender(deferred1.promise).then(() => {
-      deferred2.resolve(deferred2Text);
-      this.set('promise', deferred2.promise);
-      return afterRender(deferred2.promise);
-    }).then(() => {
-      assert.dom('#promise').hasText(deferred2Text, 'value updates when the promise changes');
-    });
+    return afterRender(deferred1.promise)
+      .then(() => {
+        deferred2.resolve(deferred2Text);
+        this.set('promise', deferred2.promise);
+        return afterRender(deferred2.promise);
+      })
+      .then(() => {
+        assert
+          .dom('#promise')
+          .hasText(deferred2Text, 'value updates when the promise changes');
+      });
   });
 
-  test('works with {{#each}} when promise resolves', async function(assert) {
+  test('works with {{#each}} when promise resolves', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -93,24 +99,24 @@ module('integration - await helper', function(hooks) {
       </ul>
     `);
 
-    assert.dom('*').hasText('Nothing.', '{{#each}} renders as empty until promise resolves');
+    assert
+      .dom('*')
+      .hasText('Nothing.', '{{#each}} renders as empty until promise resolves');
 
-    deferred.resolve([
-      {name: 'Katie'},
-      {name: 'Jenny'},
-      {name: 'Anna'}
-    ]);
+    deferred.resolve([{ name: 'Katie' }, { name: 'Jenny' }, { name: 'Anna' }]);
 
     return afterRender(deferred.promise).then(() => {
       assert.dom('li').exists({ count: 3 });
 
-      const names = findAll('li').map( el => el.textContent.trim() ).join(' ');
+      const names = findAll('li')
+        .map((el) => el.textContent.trim())
+        .join(' ');
 
       assert.equal(names, 'Katie Jenny Anna');
     });
   });
 
-  test('works with {{#each}} when promise rejects', async function(assert) {
+  test('works with {{#each}} when promise rejects', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -125,7 +131,9 @@ module('integration - await helper', function(hooks) {
       </ul>
     `);
 
-    assert.dom('*').hasText('Nothing.', '{{#each}} renders as empty until promise rejects');
+    assert
+      .dom('*')
+      .hasText('Nothing.', '{{#each}} renders as empty until promise rejects');
 
     deferred.reject(new Error('oh no'));
 
@@ -134,7 +142,7 @@ module('integration - await helper', function(hooks) {
     });
   });
 
-  test('works with inline if when promise rejects', async function(assert) {
+  test('works with inline if when promise rejects', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -152,7 +160,7 @@ module('integration - await helper', function(hooks) {
     });
   });
 
-  test('works with inline if when promise resolves', async function(assert) {
+  test('works with inline if when promise resolves', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -166,12 +174,14 @@ module('integration - await helper', function(hooks) {
     deferred.resolve('yay!');
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('#foo').hasClass('fulfilled', 'inline if updates with when promise resolves');
+      assert
+        .dom('#foo')
+        .hasClass('fulfilled', 'inline if updates with when promise resolves');
       deferred.resolve();
     });
   });
 
-  test('always renders with the last promise set', async function(assert) {
+  test('always renders with the last promise set', async function (assert) {
     let deferred1 = RSVP.defer();
     let deferred2 = RSVP.defer();
     let deferred3 = RSVP.defer();
@@ -190,17 +200,19 @@ module('integration - await helper', function(hooks) {
     this.set('promise', deferred2.promise);
     this.set('promise', deferred3.promise);
 
-    return afterRender(RSVP.all([deferred2.promise, deferred3.promise])).then(() => {
-      assert.dom('*').hasText(
-        'number 3',
-        'the last set promise is rendered last even when other promises resolve first'
-      );
-    });
-
+    return afterRender(RSVP.all([deferred2.promise, deferred3.promise])).then(
+      () => {
+        assert
+          .dom('*')
+          .hasText(
+            'number 3',
+            'the last set promise is rendered last even when other promises resolve first'
+          );
+      }
+    );
   });
 
-
-  test('passes through non-promise values unchanged', async function(assert) {
+  test('passes through non-promise values unchanged', async function (assert) {
     this.set('value', 42);
 
     await render(hbs`
@@ -209,10 +221,9 @@ module('integration - await helper', function(hooks) {
 
     assert.dom('#promise').exists({ count: 1 });
     assert.dom('#promise').hasText('42');
-
   });
 
-  test('switching from promise to non-promise correctly ignores promise resolution', async function(assert) {
+  test('switching from promise to non-promise correctly ignores promise resolution', async function (assert) {
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
@@ -226,15 +237,17 @@ module('integration - await helper', function(hooks) {
     deferred.resolve('promiseFinished');
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('#promise').hasText('iAmConstant', 'ignores a promise that has been replaced');
+      assert
+        .dom('#promise')
+        .hasText('iAmConstant', 'ignores a promise that has been replaced');
     });
   });
 
-  test('promises that get wrapped by RSVP.Promise.resolve still work correctly', async function(assert) {
+  test('promises that get wrapped by RSVP.Promise.resolve still work correctly', async function (assert) {
     let deferred = RSVP.defer();
     let ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
     let proxy = ObjectPromiseProxy.create({
-      promise: deferred.promise
+      promise: deferred.promise,
     });
     this.set('promise', proxy);
     await render(hbs`

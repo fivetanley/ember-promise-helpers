@@ -6,5 +6,5 @@ export default Helper.extend({
     const args = Array.isArray(params[0]) ? params[0] : params;
 
     return RSVP.all(args);
-  }
+  },
 });

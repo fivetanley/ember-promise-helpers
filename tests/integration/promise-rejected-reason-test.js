@@ -5,10 +5,10 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import afterRender from 'dummy/tests/helpers/after-render';
 
-module('integration - promise-rejected-reason error', function(hooks) {
+module('integration - promise-rejected-reason error', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('is false until the promise rejects', async function(assert) {
+  test('is false until the promise rejects', async function (assert) {
     let deferred = RSVP.defer();
     this.set('promise', deferred.promise);
 
@@ -22,7 +22,9 @@ module('integration - promise-rejected-reason error', function(hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText('Probably not rejected yet.', 'false until rejection is known');
+    assert
+      .dom('*')
+      .hasText('Probably not rejected yet.', 'false until rejection is known');
 
     deferred.reject(new Error('nope'));
 
@@ -31,7 +33,7 @@ module('integration - promise-rejected-reason error', function(hooks) {
     });
   });
 
-  test('is false when the promise resolves', async function(assert) {
+  test('is false when the promise resolves', async function (assert) {
     let deferred = RSVP.defer();
     this.set('promise', deferred.promise);
 
@@ -45,12 +47,16 @@ module('integration - promise-rejected-reason error', function(hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText('Probably not rejected yet.', 'false before promise resolves');
+    assert
+      .dom('*')
+      .hasText('Probably not rejected yet.', 'false before promise resolves');
 
     deferred.resolve(true);
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('Probably not rejected yet.', 'false after promise resolves');
+      assert
+        .dom('*')
+        .hasText('Probably not rejected yet.', 'false after promise resolves');
     });
   });
 });
