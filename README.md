@@ -164,36 +164,6 @@ Uses the `Ember.RSVP.hash` function to create a promise.
 
 This would render "The error was whoops."
 
-# Proposed Block Helper syntax (Not implemented!)
-
-If you want to know when a promise becomes rejected or resolved, you can
-use the `await-promise` component, which gives you an `error` property
-if the promise becomes rejected (similar to calling `.catch` on a
-promise.). Another `isFulfilled` argument is passed for you to handle
-loading state:
-
-```handlebars
-{{#await-promise model.author as |author error isFulfilled|}}
-  {{#if isFulfilled}}
-
-    {{#unless error}}
-
-      {{#if author}}
-        The author is: {{author.name}}
-      {{{else}}
-        There is no author!
-      {{/if}}
-
-    {{else}}
-      Oops! The error was {{error.message}}
-    {{/unless}}
-
-  {{else}}
-    Loading...
-  {{/if}}
-{{/await-promise}}
-```
-
 ## Development Installation
 
 * `git clone` this repository
