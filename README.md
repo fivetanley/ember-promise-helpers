@@ -164,25 +164,26 @@ Uses the `Ember.RSVP.hash` function to create a promise.
 
 This would render "The error was whoops."
 
-## Development Installation
+## Installation
 
-* `git clone` this repository
-* `yarn`
+* `git clone <repository-url>`
+* `cd ember-promise-helpers`
+* `yarn install`
 
-## Running
+## Linting
+
+* `yarn lint`
+* `yarn lint:fix`
+
+## Running tests
 
 * `ember test` – Runs the test suite on the current Ember version
 * `ember test --server` – Runs the test suite in "watch mode"
 * `ember try:each` – Runs the test suite against multiple Ember versions
 
-## Running Tests
+## Running the dummy application
 
-* `npm test` (Runs `ember try:testall` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+* `ember serve`
+* Visit the dummy application at [http://localhost:4200](http://localhost:4200).
 
-## Building
-
-* `ember build`
-
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
