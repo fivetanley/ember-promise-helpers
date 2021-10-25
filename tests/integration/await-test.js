@@ -85,6 +85,7 @@ module('integration - await helper', function (hooks) {
   });
 
   test('works with {{#each}} when promise resolves', async function (assert) {
+    assert.expect(3);
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
