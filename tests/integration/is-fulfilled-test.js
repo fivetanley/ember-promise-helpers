@@ -24,12 +24,16 @@ module('integration - is-fulfilled helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's fulfilled`, 'evaluates to false');
 
     deferred.resolve('yay!');
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('true', 'value changes and template re-renders');
+      assert
+        .dom(this.element)
+        .hasText('true', 'value changes and template re-renders');
     });
   });
 
@@ -49,7 +53,7 @@ module('integration - is-fulfilled helper', function (hooks) {
     `);
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('true');
+      assert.dom(this.element).hasText('true');
     });
   });
 
@@ -77,7 +81,7 @@ module('integration - is-fulfilled helper', function (hooks) {
         return afterRender(promise);
       })
       .then(() => {
-        assert.dom('*').hasText('totally rejected');
+        assert.dom(this.element).hasText('totally rejected');
       });
   });
 
@@ -104,7 +108,7 @@ module('integration - is-fulfilled helper', function (hooks) {
 
     return afterRender(RSVP.all(allPromises)).finally(() => {
       assert
-        .dom('*')
+        .dom(this.element)
         .hasText(
           'rejected',
           'the last set promise is rendered last even when other promises resolve first'

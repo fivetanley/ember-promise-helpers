@@ -101,7 +101,7 @@ module('integration - await helper', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Nothing.', '{{#each}} renders as empty until promise resolves');
 
     deferred.resolve([{ name: 'Katie' }, { name: 'Jenny' }, { name: 'Anna' }]);
@@ -133,7 +133,7 @@ module('integration - await helper', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Nothing.', '{{#each}} renders as empty until promise rejects');
 
     deferred.reject(new Error('oh no'));
@@ -204,7 +204,7 @@ module('integration - await helper', function (hooks) {
     return afterRender(RSVP.all([deferred2.promise, deferred3.promise])).then(
       () => {
         assert
-          .dom('*')
+          .dom(this.element)
           .hasText(
             'number 3',
             'the last set promise is rendered last even when other promises resolve first'

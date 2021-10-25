@@ -61,20 +61,24 @@ module('integration - promise-all helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's fulfilled`, 'evaluates to false');
 
     deferred1.resolve('yay!');
 
     return afterRender(promise1)
       .then(() => {
-        assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
+        assert
+          .dom(this.element)
+          .hasText(`idk if it's fulfilled`, 'evaluates to false');
         deferred2.resolve('yay!');
 
         return afterRender(promise2);
       })
       .then(() => {
         assert
-          .dom('*')
+          .dom(this.element)
           .hasText('true', 'value changes and template re-renders');
       });
   });
@@ -88,21 +92,25 @@ module('integration - promise-all helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText('Pending!', 'is-pending is true before resolved');
+    assert
+      .dom(this.element)
+      .hasText('Pending!', 'is-pending is true before resolved');
 
     deferred1.resolve('resolved!');
 
     return afterRender(promise1)
       .then(() => {
         assert
-          .dom('*')
+          .dom(this.element)
           .hasText('Pending!', 'is-pending is true before resolved');
         deferred2.resolve('resolved!');
 
         return afterRender(promise2);
       })
       .then(() => {
-        assert.dom('*').hasText('Done!', 'is-pending is false after resolved');
+        assert
+          .dom(this.element)
+          .hasText('Done!', 'is-pending is false after resolved');
       });
   });
 
@@ -115,12 +123,16 @@ module('integration - promise-all helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText(`idk if it's rejected`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's rejected`, 'evaluates to false');
 
     deferred1.reject(new Error('nope'));
 
     return afterRender(RSVP.all([promise1, promise2])).then(() => {
-      assert.dom('*').hasText('true', 'value changes and template re-renders');
+      assert
+        .dom(this.element)
+        .hasText('true', 'value changes and template re-renders');
     });
   });
 
@@ -136,13 +148,15 @@ module('integration - promise-all helper', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Probably not rejected yet.', 'false until rejection is known');
 
     deferred1.reject(new Error('nope'));
 
     return afterRender(RSVP.all([promise1, promise2])).then(() => {
-      assert.dom('*').hasText('nope', 'false until rejection is known');
+      assert
+        .dom(this.element)
+        .hasText('nope', 'false until rejection is known');
     });
   });
 });

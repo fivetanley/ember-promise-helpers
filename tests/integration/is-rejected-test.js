@@ -24,12 +24,16 @@ module('integration - is-rejected helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText(`idk if it's rejected`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's rejected`, 'evaluates to false');
 
     deferred.reject(new Error('noooo :('));
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('true', 'value changes and template re-renders');
+      assert
+        .dom(this.element)
+        .hasText('true', 'value changes and template re-renders');
     });
   });
 
@@ -49,7 +53,7 @@ module('integration - is-rejected helper', function (hooks) {
     `);
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('promise is already fulfilled');
+      assert.dom(this.element).hasText('promise is already fulfilled');
     });
   });
 
@@ -78,7 +82,7 @@ module('integration - is-rejected helper', function (hooks) {
         return afterRender(promise);
       })
       .then(() => {
-        assert.dom('*').hasText('true');
+        assert.dom(this.element).hasText('true');
       });
   });
 
@@ -105,7 +109,7 @@ module('integration - is-rejected helper', function (hooks) {
 
     return afterRender(RSVP.all(promises)).finally(() => {
       assert
-        .dom('*')
+        .dom(this.element)
         .hasText(
           'rejected',
           'the last set promise is rendered last even when other promises resolve first'

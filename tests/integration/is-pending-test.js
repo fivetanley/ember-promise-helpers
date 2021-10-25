@@ -22,12 +22,16 @@ module('integration - is-pending helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText('Pending!', 'is-pending is true before resolved');
+    assert
+      .dom(this.element)
+      .hasText('Pending!', 'is-pending is true before resolved');
 
     deferred.resolve('resolved!');
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('Done!', 'is-pending is false after resolved');
+      assert
+        .dom(this.element)
+        .hasText('Done!', 'is-pending is false after resolved');
     });
   });
 
@@ -44,12 +48,16 @@ module('integration - is-pending helper', function (hooks) {
       {{/if}}
     `);
 
-    assert.dom('*').hasText('Pending!', 'is-pending is false before resolved');
+    assert
+      .dom(this.element)
+      .hasText('Pending!', 'is-pending is false before resolved');
 
     deferred.reject(new Error('oh noes'));
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('Done!', 'is-pending is true after resolved');
+      assert
+        .dom(this.element)
+        .hasText('Done!', 'is-pending is true after resolved');
     });
   });
 
@@ -76,7 +84,7 @@ module('integration - is-pending helper', function (hooks) {
 
     return afterRender(RSVP.all(promises)).then(() => {
       assert
-        .dom('*')
+        .dom(this.element)
         .hasText(
           'pending',
           'the last set promise is rendered last even when other promises resolve first'
