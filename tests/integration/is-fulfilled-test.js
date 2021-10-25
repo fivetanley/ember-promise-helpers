@@ -17,8 +17,8 @@ module('integration - is-fulfilled helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-fulfilled promise)}}
-        {{is-fulfilled promise}}
+      {{#if (is-fulfilled this.promise)}}
+        {{is-fulfilled this.promise}}
       {{else}}
         idk if it's fulfilled
       {{/if}}
@@ -41,8 +41,8 @@ module('integration - is-fulfilled helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-fulfilled promise)}}
-        {{is-fulfilled promise}}
+      {{#if (is-fulfilled this.promise)}}
+        {{is-fulfilled this.promise}}
       {{else}}
         idk if it's fulfilled
       {{/if}}
@@ -68,8 +68,8 @@ module('integration - is-fulfilled helper', function (hooks) {
         this.set('promise', promise);
 
         await render(hbs`
-        {{#if (is-fulfilled promise)}}
-          {{is-fulfilled promise}}
+        {{#if (is-fulfilled this.promise)}}
+          {{is-fulfilled this.promise}}
         {{else}}
           totally rejected
         {{/if}}
@@ -89,7 +89,7 @@ module('integration - is-fulfilled helper', function (hooks) {
     this.set('promise', deferred1);
 
     await render(hbs`
-      {{if (is-fulfilled promise) 'fulfilled' 'rejected'}}
+      {{if (is-fulfilled this.promise) 'fulfilled' 'rejected'}}
     `);
 
     deferred1.resolve('number 1');

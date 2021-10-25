@@ -15,7 +15,7 @@ module('integration - is-pending helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-pending promise)}}
+      {{#if (is-pending this.promise)}}
         Pending!
       {{else}}
         Done!
@@ -37,7 +37,7 @@ module('integration - is-pending helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-pending promise)}}
+      {{#if (is-pending this.promise)}}
         Pending!
       {{else}}
         Done!
@@ -61,7 +61,7 @@ module('integration - is-pending helper', function (hooks) {
     this.set('promise', deferred1.promise);
 
     await render(hbs`
-      {{if (is-pending promise) 'pending' 'not-pending'}}
+      {{if (is-pending this.promise) 'pending' 'not-pending'}}
     `);
 
     deferred1.resolve('number 1');

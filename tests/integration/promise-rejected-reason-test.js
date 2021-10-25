@@ -13,8 +13,8 @@ module('integration - promise-rejected-reason error', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (promise-rejected-reason promise)}}
-        {{#with (promise-rejected-reason promise) as |reason|}}
+      {{#if (promise-rejected-reason this.promise)}}
+        {{#with (promise-rejected-reason this.promise) as |reason|}}
           {{reason.message}}
         {{/with}}
       {{else}}
@@ -38,8 +38,8 @@ module('integration - promise-rejected-reason error', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (promise-rejected-reason promise)}}
-        {{#with (promise-rejected-reason promise) as |reason|}}
+      {{#if (promise-rejected-reason this.promise)}}
+        {{#with (promise-rejected-reason this.promise) as |reason|}}
           {{reason.message}}
         {{/with}}
       {{else}}

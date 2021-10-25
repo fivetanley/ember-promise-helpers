@@ -17,8 +17,8 @@ module('integration - is-rejected helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-rejected promise)}}
-        {{is-rejected promise}}
+      {{#if (is-rejected this.promise)}}
+        {{is-rejected this.promise}}
       {{else}}
         idk if it's rejected
       {{/if}}
@@ -41,8 +41,8 @@ module('integration - is-rejected helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-rejected promise)}}
-        {{is-rejected promise}}
+      {{#if (is-rejected this.promise)}}
+        {{is-rejected this.promise}}
       {{else}}
         promise is already fulfilled
       {{/if}}
@@ -68,8 +68,8 @@ module('integration - is-rejected helper', function (hooks) {
         this.set('promise', promise);
 
         await render(hbs`
-        {{#if (is-rejected promise)}}
-          {{is-rejected promise}}
+        {{#if (is-rejected this.promise)}}
+          {{is-rejected this.promise}}
         {{else}}
           totally rejected
         {{/if}}
@@ -90,7 +90,7 @@ module('integration - is-rejected helper', function (hooks) {
     this.set('promise', deferred1.promise);
 
     await render(hbs`
-      {{if (is-rejected promise) 'rejected' 'not-rejected'}}
+      {{if (is-rejected this.promise) 'rejected' 'not-rejected'}}
     `);
 
     deferred1.resolve('number 1');

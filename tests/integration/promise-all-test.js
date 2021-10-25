@@ -22,7 +22,7 @@ module('integration - promise-all helper', function (hooks) {
 
   test('works with iawait helper', async function (assert) {
     await render(hbs`
-      <span id="promise">{{await (promise-all promise1 promise2)}}</span>
+      <span id="promise">{{await (promise-all this.promise1 this.promise2)}}</span>
     `);
 
     assert.dom('#promise').exists({ count: 1 });
@@ -54,8 +54,8 @@ module('integration - promise-all helper', function (hooks) {
 
   test('works with is-fulfilled helper', async function (assert) {
     await render(hbs`
-      {{#if (is-fulfilled (promise-all promise1 promise2))}}
-        {{is-fulfilled (promise-all promise1 promise2)}}
+      {{#if (is-fulfilled (promise-all this.promise1 this.promise2))}}
+        {{is-fulfilled (promise-all this.promise1 this.promise2)}}
       {{else}}
         idk if it's fulfilled
       {{/if}}
@@ -81,7 +81,7 @@ module('integration - promise-all helper', function (hooks) {
 
   test('works with is-pending helper', async function (assert) {
     await render(hbs`
-      {{#if (is-pending (promise-all promise1 promise2))}}
+      {{#if (is-pending (promise-all this.promise1 this.promise2))}}
         Pending!
       {{else}}
         Done!
@@ -108,8 +108,8 @@ module('integration - promise-all helper', function (hooks) {
 
   test('works with is-rejected helper', async function (assert) {
     await render(hbs`
-      {{#if (is-rejected (promise-all promise1 promise2))}}
-        {{is-rejected (promise-all promise1 promise2)}}
+      {{#if (is-rejected (promise-all this.promise1 this.promise2))}}
+        {{is-rejected (promise-all this.promise1 this.promise2)}}
       {{else}}
         idk if it's rejected
       {{/if}}
@@ -126,8 +126,8 @@ module('integration - promise-all helper', function (hooks) {
 
   test('works with promise-rejected-reason helper', async function (assert) {
     await render(hbs`
-      {{#if (promise-rejected-reason (promise-all promise1 promise2))}}
-        {{#with (promise-rejected-reason (promise-all promise1 promise2)) as |reason|}}
+      {{#if (promise-rejected-reason (promise-all this.promise1 this.promise2))}}
+        {{#with (promise-rejected-reason (promise-all this.promise1 this.promise2)) as |reason|}}
           {{reason.message}}
         {{/with}}
       {{else}}

@@ -22,7 +22,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with await helper', async function (assert) {
     await render(hbs`
-      {{#with (await (promise-hash promise1=promise1 promise2=promise2)) as |promiseAll|}}
+      {{#with (await (promise-hash promise1=this.promise1 promise2=this.promise2)) as |promiseAll|}}
         <span id="promise1">{{promiseAll.promise1}}</span>
         <span id="promise2">{{promiseAll.promise2}}</span>
       {{/with}}
@@ -59,7 +59,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with is-fulfilled helper', async function (assert) {
     await render(hbs`
-      {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
+      {{#with (promise-hash promise1=this.promise1 promise2=this.promise2) as |promiseAll|}}
         {{#if (is-fulfilled promiseAll)}}
           {{is-fulfilled promiseAll}}
         {{else}}
@@ -88,7 +88,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with is-pending helper', async function (assert) {
     await render(hbs`
-      {{#if (is-pending (promise-hash promise1=promise1 promise2=promise2))}}
+      {{#if (is-pending (promise-hash promise1=this.promise1 promise2=this.promise2))}}
         Pending!
       {{else}}
         Done!
@@ -115,7 +115,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with is-rejected helper', async function (assert) {
     await render(hbs`
-      {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
+      {{#with (promise-hash promise1=this.promise1 promise2=this.promise2) as |promiseAll|}}
         {{#if (is-rejected promiseAll)}}
           {{is-rejected promiseAll}}
         {{else}}
@@ -135,7 +135,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with promise-rejected-reason helper', async function (assert) {
     await render(hbs`
-      {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
+      {{#with (promise-hash promise1=this.promise1 promise2=this.promise2) as |promiseAll|}}
         {{#if (promise-rejected-reason promiseAll)}}
           {{#with (promise-rejected-reason promiseAll) as |reason|}}
             {{reason.message}}
