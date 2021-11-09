@@ -63,7 +63,7 @@ jobs:
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v2-beta
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 16
  
       - name: Get Yarn cache path
         id: yarn-cache-dir-path
