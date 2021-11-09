@@ -1,6 +1,11 @@
 Changelog
 ------
 
+### 2.0.0 (November 9, 2021)
+
+- Update dependencies to remove deprecations for babel/etc
+- Drop support for node 10. Add support for node 16 [138](https://github.com/fivetanley/ember-promise-helpers/pull/143) by @jrjohnson and @fivetanley
+
 ### 1.0.7 (December 4, 2018)
 
 - remove re-exports of non-existant names [32](https://github.com/fivetanley/ember-promise-helpers/pull/32) by @ef4
