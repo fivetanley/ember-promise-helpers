@@ -22,7 +22,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with await helper', async function (assert) {
     await render(hbs`
-      {{#with (await (promise-hash promise1=promise1 promise2=promise2)) as |promiseAll|}}
+      {{#with (await (promise-hash promise1=this.promise1 promise2=this.promise2)) as |promiseAll|}}
         <span id="promise1">{{promiseAll.promise1}}</span>
         <span id="promise2">{{promiseAll.promise2}}</span>
       {{/with}}
@@ -59,7 +59,7 @@ module('integration - promise-hash helper', function (hooks) {
 
   test('works with is-fulfilled helper', async function (assert) {
     await render(hbs`
-      {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
+      {{#with (promise-hash promise1=this.promise1 promise2=this.promise2) as |promiseAll|}}
         {{#if (is-fulfilled promiseAll)}}
           {{is-fulfilled promiseAll}}
         {{else}}
@@ -68,54 +68,62 @@ module('integration - promise-hash helper', function (hooks) {
       {{/with}}
     `);
 
-    assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's fulfilled`, 'evaluates to false');
 
     deferred1.resolve('yay!');
 
     return afterRender(promise1)
       .then(() => {
-        assert.dom('*').hasText(`idk if it's fulfilled`, 'evaluates to false');
+        assert
+          .dom(this.element)
+          .hasText(`idk if it's fulfilled`, 'evaluates to false');
         deferred2.resolve('yay!');
 
         return afterRender(promise2);
       })
       .then(() => {
         assert
-          .dom('*')
+          .dom(this.element)
           .hasText('true', 'value changes and template re-renders');
       });
   });
 
   test('works with is-pending helper', async function (assert) {
     await render(hbs`
-      {{#if (is-pending (promise-hash promise1=promise1 promise2=promise2))}}
+      {{#if (is-pending (promise-hash promise1=this.promise1 promise2=this.promise2))}}
         Pending!
       {{else}}
         Done!
       {{/if}}
     `);
 
-    assert.dom('*').hasText('Pending!', 'is-pending is true before resolved');
+    assert
+      .dom(this.element)
+      .hasText('Pending!', 'is-pending is true before resolved');
 
     deferred1.resolve('resolved!');
 
     return afterRender(promise1)
       .then(() => {
         assert
-          .dom('*')
+          .dom(this.element)
           .hasText('Pending!', 'is-pending is true before resolved');
         deferred2.resolve('resolved!');
 
         return afterRender(promise2);
       })
       .then(() => {
-        assert.dom('*').hasText('Done!', 'is-pending is false after resolved');
+        assert
+          .dom(this.element)
+          .hasText('Done!', 'is-pending is false after resolved');
       });
   });
 
   test('works with is-rejected helper', async function (assert) {
     await render(hbs`
-      {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
+      {{#with (promise-hash promise1=this.promise1 promise2=this.promise2) as |promiseAll|}}
         {{#if (is-rejected promiseAll)}}
           {{is-rejected promiseAll}}
         {{else}}
@@ -124,18 +132,22 @@ module('integration - promise-hash helper', function (hooks) {
       {{/with}}
     `);
 
-    assert.dom('*').hasText(`idk if it's rejected`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's rejected`, 'evaluates to false');
 
     deferred1.reject(new Error('nope'));
 
     return afterRender(RSVP.all([promise1, promise2])).then(() => {
-      assert.dom('*').hasText('true', 'value changes and template re-renders');
+      assert
+        .dom(this.element)
+        .hasText('true', 'value changes and template re-renders');
     });
   });
 
   test('works with promise-rejected-reason helper', async function (assert) {
     await render(hbs`
-      {{#with (promise-hash promise1=promise1 promise2=promise2) as |promiseAll|}}
+      {{#with (promise-hash promise1=this.promise1 promise2=this.promise2) as |promiseAll|}}
         {{#if (promise-rejected-reason promiseAll)}}
           {{#with (promise-rejected-reason promiseAll) as |reason|}}
             {{reason.message}}
@@ -147,13 +159,15 @@ module('integration - promise-hash helper', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Probably not rejected yet.', 'false until rejection is known');
 
     deferred1.reject(new Error('nope'));
 
     return afterRender(RSVP.all([promise1, promise2])).then(() => {
-      assert.dom('*').hasText('nope', 'false until rejection is known');
+      assert
+        .dom(this.element)
+        .hasText('nope', 'false until rejection is known');
     });
   });
 });

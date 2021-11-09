@@ -13,8 +13,8 @@ module('integration - promise-rejected-reason error', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (promise-rejected-reason promise)}}
-        {{#with (promise-rejected-reason promise) as |reason|}}
+      {{#if (promise-rejected-reason this.promise)}}
+        {{#with (promise-rejected-reason this.promise) as |reason|}}
           {{reason.message}}
         {{/with}}
       {{else}}
@@ -23,13 +23,15 @@ module('integration - promise-rejected-reason error', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Probably not rejected yet.', 'false until rejection is known');
 
     deferred.reject(new Error('nope'));
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('nope', 'false until rejection is known');
+      assert
+        .dom(this.element)
+        .hasText('nope', 'false until rejection is known');
     });
   });
 
@@ -38,8 +40,8 @@ module('integration - promise-rejected-reason error', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (promise-rejected-reason promise)}}
-        {{#with (promise-rejected-reason promise) as |reason|}}
+      {{#if (promise-rejected-reason this.promise)}}
+        {{#with (promise-rejected-reason this.promise) as |reason|}}
           {{reason.message}}
         {{/with}}
       {{else}}
@@ -48,14 +50,14 @@ module('integration - promise-rejected-reason error', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Probably not rejected yet.', 'false before promise resolves');
 
     deferred.resolve(true);
 
     return afterRender(deferred.promise).then(() => {
       assert
-        .dom('*')
+        .dom(this.element)
         .hasText('Probably not rejected yet.', 'false after promise resolves');
     });
   });

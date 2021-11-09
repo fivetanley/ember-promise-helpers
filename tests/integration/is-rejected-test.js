@@ -17,19 +17,23 @@ module('integration - is-rejected helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-rejected promise)}}
-        {{is-rejected promise}}
+      {{#if (is-rejected this.promise)}}
+        {{is-rejected this.promise}}
       {{else}}
         idk if it's rejected
       {{/if}}
     `);
 
-    assert.dom('*').hasText(`idk if it's rejected`, 'evaluates to false');
+    assert
+      .dom(this.element)
+      .hasText(`idk if it's rejected`, 'evaluates to false');
 
     deferred.reject(new Error('noooo :('));
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('true', 'value changes and template re-renders');
+      assert
+        .dom(this.element)
+        .hasText('true', 'value changes and template re-renders');
     });
   });
 
@@ -41,15 +45,15 @@ module('integration - is-rejected helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      {{#if (is-rejected promise)}}
-        {{is-rejected promise}}
+      {{#if (is-rejected this.promise)}}
+        {{is-rejected this.promise}}
       {{else}}
         promise is already fulfilled
       {{/if}}
     `);
 
     return afterRender(deferred.promise).then(() => {
-      assert.dom('*').hasText('promise is already fulfilled');
+      assert.dom(this.element).hasText('promise is already fulfilled');
     });
   });
 
@@ -68,8 +72,8 @@ module('integration - is-rejected helper', function (hooks) {
         this.set('promise', promise);
 
         await render(hbs`
-        {{#if (is-rejected promise)}}
-          {{is-rejected promise}}
+        {{#if (is-rejected this.promise)}}
+          {{is-rejected this.promise}}
         {{else}}
           totally rejected
         {{/if}}
@@ -78,7 +82,7 @@ module('integration - is-rejected helper', function (hooks) {
         return afterRender(promise);
       })
       .then(() => {
-        assert.dom('*').hasText('true');
+        assert.dom(this.element).hasText('true');
       });
   });
 
@@ -90,7 +94,7 @@ module('integration - is-rejected helper', function (hooks) {
     this.set('promise', deferred1.promise);
 
     await render(hbs`
-      {{if (is-rejected promise) 'rejected' 'not-rejected'}}
+      {{if (is-rejected this.promise) 'rejected' 'not-rejected'}}
     `);
 
     deferred1.resolve('number 1');
@@ -105,7 +109,7 @@ module('integration - is-rejected helper', function (hooks) {
 
     return afterRender(RSVP.all(promises)).finally(() => {
       assert
-        .dom('*')
+        .dom(this.element)
         .hasText(
           'rejected',
           'the last set promise is rendered last even when other promises resolve first'

@@ -19,7 +19,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      <span id="promise">{{await promise}}</span>
+      <span id="promise">{{await this.promise}}</span>
     `);
 
     assert.dom('#promise').exists({ count: 1 });
@@ -42,7 +42,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      <span id="promise">{{await promise}}</span>
+      <span id="promise">{{await this.promise}}</span>
     `);
 
     assert.dom('#promise').hasText('');
@@ -63,7 +63,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred1.promise);
 
     await render(hbs`
-      <span id="promise">{{await promise}}</span>
+      <span id="promise">{{await this.promise}}</span>
     `);
 
     const deferred1Text = 'hi';
@@ -85,13 +85,14 @@ module('integration - await helper', function (hooks) {
   });
 
   test('works with {{#each}} when promise resolves', async function (assert) {
+    assert.expect(3);
     let deferred = RSVP.defer();
 
     this.set('promise', deferred.promise);
 
     await render(hbs`
       <ul>
-        {{#each (await promise) as |thing|}}
+        {{#each (await this.promise) as |thing|}}
           <li>{{thing.name}}</li>
         {{else}}
           Nothing.
@@ -100,7 +101,7 @@ module('integration - await helper', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Nothing.', '{{#each}} renders as empty until promise resolves');
 
     deferred.resolve([{ name: 'Katie' }, { name: 'Jenny' }, { name: 'Anna' }]);
@@ -123,7 +124,7 @@ module('integration - await helper', function (hooks) {
 
     await render(hbs`
       <ul>
-        {{#each (await promise) as |thing|}}
+        {{#each (await this.promise) as |thing|}}
           <li>{{thing.name}}</li>
         {{else}}
           Nothing.
@@ -132,7 +133,7 @@ module('integration - await helper', function (hooks) {
     `);
 
     assert
-      .dom('*')
+      .dom(this.element)
       .hasText('Nothing.', '{{#each}} renders as empty until promise rejects');
 
     deferred.reject(new Error('oh no'));
@@ -148,7 +149,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      <div class="foo {{if (await promise) 'fullfilled' 'rejected'}}"></div>
+      <div class="foo {{if (await this.promise) 'fullfilled' 'rejected'}}"></div>
     `);
 
     assert.dom('.foo').hasNoClass('fulfilled');
@@ -166,7 +167,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      <div id="foo" class="{{if (await promise) 'fulfilled' 'rejected'}}"></div>
+      <div id="foo" class="{{if (await this.promise) 'fulfilled' 'rejected'}}"></div>
     `);
 
     assert.dom('#foo').hasNoClass('fulfilled');
@@ -189,7 +190,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred3);
 
     await render(hbs`
-      {{await promise}}
+      {{await this.promise}}
     `);
 
     deferred1.resolve('number 1');
@@ -203,7 +204,7 @@ module('integration - await helper', function (hooks) {
     return afterRender(RSVP.all([deferred2.promise, deferred3.promise])).then(
       () => {
         assert
-          .dom('*')
+          .dom(this.element)
           .hasText(
             'number 3',
             'the last set promise is rendered last even when other promises resolve first'
@@ -216,7 +217,7 @@ module('integration - await helper', function (hooks) {
     this.set('value', 42);
 
     await render(hbs`
-      <span id="promise">{{await value}}</span>
+      <span id="promise">{{await this.value}}</span>
     `);
 
     assert.dom('#promise').exists({ count: 1 });
@@ -229,7 +230,7 @@ module('integration - await helper', function (hooks) {
     this.set('promise', deferred.promise);
 
     await render(hbs`
-      <span id="promise">{{await promise}}</span>
+      <span id="promise">{{await this.promise}}</span>
     `);
 
     this.set('promise', 'iAmConstant');
@@ -251,7 +252,7 @@ module('integration - await helper', function (hooks) {
     });
     this.set('promise', proxy);
     await render(hbs`
-      {{#with (await promise) as |obj|}}
+      {{#with (await this.promise) as |obj|}}
         <span id="promise">{{obj.foo}}</span>
       {{/with}}
     `);
