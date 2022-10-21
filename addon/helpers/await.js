@@ -1,4 +1,5 @@
 import Helper from '@ember/component/helper';
+import { warn } from '@ember/debug';
 import { Promise } from 'rsvp';
 
 export default class extends Helper {
@@ -31,7 +32,8 @@ export default class extends Helper {
       try {
         const value = await promise;
         this.setValue(value, maybePromise);
-      } catch (_error) {
+      } catch (error) {
+        warn(`Awaited promise was rejected with error: ${error}`, false, { id: 'ember-promise-helpers.await-error' });
         this.setValue(null, maybePromise);
       }
     });
