@@ -22,11 +22,11 @@ export default class extends Helper {
    * @param any [params[1] = null] - The default value to be used before the promise settles.
    */
   compute([maybePromise, valueBeforeSettled = null]) {
+    this.valueBeforeSettled = valueBeforeSettled;
+    
     if (!maybePromise || typeof maybePromise.then !== 'function') {
       return maybePromise;
     }
-
-    this.valueBeforeSettled = valueBeforeSettled;
 
     return this.ensureLatestPromise(maybePromise, async (promise) => {
       try {
