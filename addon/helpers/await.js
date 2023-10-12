@@ -18,11 +18,12 @@ export default class extends Helper {
   /**
    * @method compute
    * @public
-   * @param params Array a list of arguments passed to the Helper.
-   * @param hash Object a list of configuration options passed to the helper.
-   * This parameter is currently unused by Await.
+   * @param promise params[0] - The promise or value to be resolved.
+   * @param any [params[1] = null] - The default value to be used before the promise settles.
    */
-  compute([maybePromise]) {
+  compute([maybePromise, valueBeforeSettled = null]) {
+    this.valueBeforeSettled = valueBeforeSettled;
+    
     if (!maybePromise || typeof maybePromise.then !== 'function') {
       return maybePromise;
     }

@@ -56,6 +56,49 @@ module('integration - await helper', function (hooks) {
     });
   });
 
+  test('renders `valueBeforeSettled` until the promise is resolved', async function (assert) {
+    let deferred = RSVP.defer();
+
+    this.set('promise', deferred.promise);
+
+    await render(hbs`
+      <span id="promise">{{await this.promise 'loading'}}</span>
+    `);
+
+    assert.dom('#promise').exists({ count: 1 });
+    assert.dom('#promise').hasText('loading');
+
+    const text = 'yass!';
+
+    deferred.resolve(text);
+
+    return afterRender(deferred.promise).then(() => {
+      assert
+        .dom('#promise')
+        .hasText(text, 're-renders when the promise is resolved');
+    });
+  });
+
+  test('renders `valueBeforeSettled` until the promise is rejected', async function (assert) {
+    let deferred = RSVP.defer();
+
+    this.set('promise', deferred.promise);
+
+    await render(hbs`
+      <span id="promise">{{await this.promise 'loading'}}</span>
+    `);
+
+    assert.dom('#promise').hasText('loading');
+
+    deferred.reject(new Error('oops'));
+
+    return afterRender(deferred.promise).then(() => {
+      assert
+        .dom('#promise')
+        .hasText('', 'value of re-render does not reveal reason for rejection');
+    });
+  });
+
   test('changing the promise changes the eventually rendered value', async function (assert) {
     let deferred1 = RSVP.defer();
     let deferred2 = RSVP.defer();
