@@ -61,6 +61,13 @@ Or use it by itself:
 {{await model.title}}
 ```
 
+A value before the promise settled can be set:
+
+```handlebars
+{{await model.title 'loading...'}}
+```
+
+
 ## is-pending
 
 Resolves with `false` if the promise resolved or rejected, otherwise
