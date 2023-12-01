@@ -257,8 +257,13 @@ module('integration - await helper', function (hooks) {
       {{/with}}
     `);
     deferred.resolve({ foo: 'hasAValue' });
-    return afterRender(deferred.promise).then(() => {
-      assert.dom('#promise').hasText('hasAValue');
-    });
+    await afterRender(deferred.promise);
+    assert.dom('#promise').hasText('hasAValue');
+
+    deferred = RSVP.defer();
+    proxy.promise = deferred.promise;
+    deferred.resolve({ foo: 'hasAnotherValue' });
+    await afterRender(deferred.promise);
+    assert.dom('#promise').hasText('hasAnotherValue');
   });
 });

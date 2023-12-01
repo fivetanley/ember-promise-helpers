@@ -1,5 +1,15 @@
 import Helper from '@ember/component/helper';
 import { Promise } from 'rsvp';
+import ArrayProxy from '@ember/array/proxy';
+import ObjectProxy from '@ember/object/proxy';
+
+function isProxy(o) {
+  return !!(o && (o instanceof ObjectProxy || o instanceof ArrayProxy));
+}
+
+function maybeUnwrapProxy(o) {
+  return isProxy(o) ? maybeUnwrapProxy(o.promise || o.content) : o;
+}
 
 export default class extends Helper {
   /**
@@ -26,6 +36,8 @@ export default class extends Helper {
     if (!maybePromise || typeof maybePromise.then !== 'function') {
       return maybePromise;
     }
+
+    maybePromise = maybeUnwrapProxy(maybePromise);
 
     return this.ensureLatestPromise(maybePromise, async (promise) => {
       try {
